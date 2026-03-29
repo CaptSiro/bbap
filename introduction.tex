@@ -1,0 +1,35 @@
+\section{Introduction}\label{sec:introduction}
+Building a feature-complete full-stack framework requires strong foundation in architecture and focus on implementing
+many features as soon as possible, and thus they sacrifice architectural design.
+This contributes to the perception that the architectural complexity of modern frameworks often exceeds the requirements
+of their intended functionality.
+
+The goal of this thesis is to design and implement a full-stack web framework focused on ease of development,
+extensibility, and AI generation tooling with minimal usage of third party code.
+The framework aims to define an abstraction layers to combat the ever-increasing complexity of frameworks.
+The intention is to make full-stack development faster and more straightforward.
+
+\subsection{Tasks}\label{subsec:introduction-tasks}
+To satisfy the goal, the thesis is divided into tasks:
+
+\begin{itemize}
+    \item Research on state-of-the-art solutions.
+    \item Study use cases and user stories.
+    \item Design extensible full-stack framework architecture.
+    \item Implement the core framework components, including content rendering, routing, database model abstraction,
+        multilingual support, and forms.
+    \item Develop administrative system for managing user configuration and management of user-generated content.
+        This includes managing content web pages, files, localization, user roles, and privileges.
+    \item Develop an editor subsystem capable of creating, manipulating, and deleting components.
+    \item Implement AI generation foundation capable of generating static webpage templates, components for the editor, translations, code documentation.
+\end{itemize}
+
+\subsection{Hypothesis}\label{subsec:introduction-hypothesis}
+This thesis proposes multiple hypothesis:
+
+\begin{itemize}
+    \item Unified and convention-driven an abstraction layer can streamline full-stack development.
+    \item Implementing a framework without using third party code requires more effort upfront but pays off in ease of feature creation.
+    \item Achieving strong architecture requires implementing all features by hand and avoiding reliance on third-party libraries.
+    \item AI generated content can drastically decrease time in content creation, but the system is brittle and still has a learning curve.
+\end{itemize}

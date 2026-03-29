@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/bbap.iml" filepath="$PROJECT_DIR$/.idea/bbap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../proj/.idea/proj.iml" filepath="$PROJECT_DIR$/../proj/.idea/proj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../php/route-chasm/.idea/route-chasm.iml" filepath="$PROJECT_DIR$/../../../php/route-chasm/.idea/route-chasm.iml" />
+    </modules>
+  </component>
+</project>
