@@ -1,0 +1,88 @@
+\subsection{Large Language Models}\label{subsec:large-language-models}
+Generalized language model was created from the demand for tasks with increasing complexity in natural language.
+These tasks may include translation, summarization, information retrieval, code generation, and many more~\parencite[2]{naveed2025llm}.
+Large Language Models are only subset of the field called Artificial Intelligence specialized in natural language processing.
+
+The first models in natural language processing used rule-based techniques dominant in the 1950s and statistical models
+in the 1980s.
+The idea of Artificial Neural Network existed in the 1940s but hasn't seen much development.
+These models were mainly used for binary classification, but they lacked the understanding of textual context
+to deal with complex tasks~\parencite[History of Large Language Models]{raiaan2024llm}.
+
+Large Language Models can be dissected into components each providing crucial functionality
+~\parencite[Background of Large Language Models]{raiaan2024llm}:
+
+\begin{itemize}
+    \item Tokenization - The initial text is parsed into a sequence of tokens such as characters, symbols, parts of words, full words, parts of sentences.
+        The main algorithms used in tokenization include WordPiece, UnigramLM, and Byte Pair Encoding.
+    \item Attention - This mechanism improves performance of the models and is responsible for figuring out representation
+        of input sequences and linking between tokens in the sequence.
+    \item Activation Function - The function gives Large Language Model the ability to learn non-trivial concepts.
+        Some of the activation functions are ReLU, GeLU, and other GLU variations.
+    \item Normalization layer - Essential part in Large Language Model's convergence rate and improves stability during training.
+        Some of the approaches are DeepNorm, RMSNorm.
+    \item Data processing - Important part of the training process is general data processing.
+        This ensures that the data is filtered for quality, de-duplicated, and removes personal data,
+        which could lead to privacy concerns.
+\end{itemize}
+
+Usage of Large Language Models for generative or transformative purposes leads to ethical problems.
+The organization should be transparent about the extent of AI usage in their works
+to ensure expectation about quality of the provided service~\parencite[Ethical and Legal Considerations in AI Translation]{ablaikhan_translation_ai}.
+
+\subsubsection{Translation}
+Recent advances in Large Language Models have significantly improved the quality of translations.
+Unlike traditional statistical or rule-based translation systems that are built on task-specific architectures,
+Large Language Models are trained on large-scale multilingual dataset gives the ability to understand the textual context
+and translate it accordingly to the meaning.
+
+Classic GPT-based models excel at producing naturally sounding translations and are not limited to a few phrases,
+which gives them ability to translate entire documents while preserving context.
+Where human post-editing is still needed is for idiomatic phrases, ambiguous phrases, or translating words with multiple meanings.
+Since Large Language Models are probabilistic their output can be different for the same sample of text when one output is strongly desired.
+This probabilistic nature also introduces biases from training data,
+particularly found in gendered languages and when translating sensitive topics~\parencite[Quality of AI Translations: Successes and Gaps]{ablaikhan_translation_ai}.
+Models can be fine-tuned in prompt to translate the text in certain ways,
+these translations are closer to transformation of a text and human intervention is needed to check for concept preservation.
+
+The use of Large Language Models for translation introduces ethical and legal concerns.
+Translations are derivative works, meaning that copyright of the original content must be respected,
+even when Large Language Models is used for translation.
+The user or organization using the translation tool is responsible for correcting translation mistakes introduced by the tool.
+
+Current systems are efficient at dealing with routine translation tasks, such as translating phrases without context,
+basic text, or structured text.
+However, the same system still need human surveillance to meet the quality standards of translations~\parencite[AI vs. Human Translators: Can AI Replace Them?]{ablaikhan_translation_ai}.
+
+\subsubsection{Code Generation}
+Recent advances in Large Language Models have significantly improved the quality of code generations.
+Code generation tasks are defined as generating code that performs the actions described in a given specification.
+The description can be written as natural language prompt or introduce domain specific pseudo-language.
+
+Large Language Models generate code by analyzing vast code bases in their training dataset~\parencite[AI Models and Techniques for Code Generation]{khade2025review_of_llm_code}.
+
+Some of the common tasks may include~\parencite[Introduction]{chen2024survey_codellm}:
+
+\begin{itemize}
+    \item Prompt to executable code - The process of converting a natural language request into executable code.
+        The generated code can be of different types: a small procedure with a well-defined functionality (e.g., a sorting algorithm),
+        an architectural component implementing logic for a specific domain (e.g., a custom collection),
+        or an executable script for an application or an operating system shell.
+    \item Interpolating code templates - The prompt consists of mostly finished code snippet and description how to fill
+        in the holes from context.
+        Potential usage may be found in translation of UI templates.
+    \item Refactoring existing code - The input includes the source code to be refactored and additional context.
+        The context may include more source code or prompt describing the architectural ideas.
+        The input also includes how the given code should be transformed.
+        It is expected that the output is executable code, which interface and functionality is kept the same as the original code.
+    \item Test case generation - The input includes the source code to be tested, additional context, and testing framework/library.
+        The output are test cases validating the performance of the code in edge case situations and correctness in expected situations.
+\end{itemize}
+
+The usage of AI for code generation enables the developers to offload repetitive tasks, and they can focus on architectural design,
+critical optimization problems, and other demanding tasks.
+The shift from pure coding jobs to AI-assisted software engineering has reshaped the job market.
+This development raises concerns about job displacement and changing demands for software developers~\parencite[Changes in Software Engeneering Job Roles]{khade2025review_of_llm_code}.
+
+\subsubsection{Code Documentation}
+
