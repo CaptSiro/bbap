@@ -1,0 +1,42 @@
+\section{System Design}\label{sec:system-design}
+This section describes how the system works without going into the implementation details.
+Painting the whole system as a black-box implementation, the interface is known, but the underlying implementation is not.
+
+\subsection{Design Goals}\label{subsec:design-goals}
+The primary objective of the system is to provide a flexible environment for full-stack development.
+The design emphasizes simplicity and ease of integration, allowing the components extended easily.
+
+The key design goals are:
+\begin{itemize}
+    \item Simplicity - The system interface is simple and similar and the implementation of programming patterns is consistent.
+    \item Modularity - The system is divided into components.
+    \item Extensibility - New functionality can be added to existing components.
+    \item Automation - Repetitive development tasks should be automated with AI if possible.
+    \item Transparency - The system should expose clear interface for each component.
+\end{itemize}
+
+These goals reflect the prototype nature of the system, which aims to explore automation of common full-stack development tasks.
+
+\input{design/components}
+
+\subsection{System Data Flow}\label{subsec:data-flow-and-integration}
+All components have access to the databases that act as a shared representation of project data.
+There a few miscellaneous objects for exposing globally constant values.
+The typical workflow consists of the following steps:
+
+\begin{enumerate}
+    \item Creation of request specific data objects and database connections are established.
+    \item Execution of actions responsible for handling the request.
+    \item Actions run business logic using database records or delegate processing to other system components.
+    \item Response is aggregated and rendered in desired format to the user.
+\end{enumerate}
+
+This pipeline-oriented design enables skipping defined steps if needed.
+
+\subsection{Summary}\label{subsec:summary}
+The proposed design emphasizes simplicity, abstraction, and extensibility.
+Designing modern systems requires solving domain-specific problems while satisfying system constraints.
+Simplicity and extensibility are two constraints that work against each other.
+Simple solutions suffer from architectures that are difficult to extend, while extensible systems are overly reliant
+on abstraction, leading to confusing APIs.
+Implementing a complex design is an act of balancing between rigid architecture and convoluted abstractions.

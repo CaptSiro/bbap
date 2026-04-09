@@ -1,0 +1,43 @@
+\subsection{System Overview}\label{subsec:system-overview}
+The system is designed as a collection of loosely coupled services that operate on shared dataset.
+At a high level, the system accepts requests and based on them generates appropriate response.
+All services operate independently communicating trough common interfaces.
+
+The system adopts a black-box design approach, where each component is defined by its usage interface and expected behavior.
+This allows the system to be heavily modified if needed and new features to be added easily.
+
+\subsubsection{Routing}
+The routing component takes care of path to executable action translation, which includes request and response creation,
+action interface definition, and dispatching actions in deterministic order.
+The component exposes functions that mount different types of endpoints to specified route.
+Route is defined as dynamic template for request paths which removes duplicity and enables variable routing.
+
+\subsubsection{Database Connection}
+The system aims to support connections to multiple databases of varying types, such as SQL or graph-based.
+The Database Connection acts a specification and guideline to implementing connections to each database type.
+Each type of database is required adhere to the specification and implement its own type of connection interface including
+Object-Relation Mapping (ORM) for querying data.
+
+\subsubsection{Asset Loading}
+The system is designed for full server-side-rendering as well as granular UI streaming.
+To satisfy this claim the system includes component for asynchronous asset loading called SideLoader.
+SideLoader exposes importer interface specifying supported file types, passing files to be imported,
+and handling import events.
+The importer is used to generate one blob of all the assets which is sent to the frontend where it is parsed and incorporated.
+The prototype defines importers for CSS and JavaScript.
+SideLoader is coupled with extension that implements HTML content streaming through custom HTML attributes and enables
+the extension to load assets the same way as if the whole page was rendered on the server.
+
+\subsubsection{Translation}
+User interface implementations include static text that is not editable by editors, although it requires translation.
+The component defines an interface in which the text serves as a key for corresponding translations.
+Using the administration dashboard, editors can find this text and either provide translations manually or generate them using AI\@.
+
+\subsubsection{Administration}
+Administration dashboard is a collection automatic procedures that includes: form extraction from database model,
+table listing of records from collection, creation of new records, and editing of existing records.
+The dashboard also provides system utilities and for the developers web view for results from tests.
+
+\subsubsection{Testing}
+The testing component aims to provide clear interface for simple unit testing with output rendering to enable viewing results
+in web view or analysing the results through JSON data representation.
