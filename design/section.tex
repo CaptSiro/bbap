@@ -22,6 +22,14 @@ These goals reflect the prototype nature of the system, which aims to explore au
 \subsection{System Data Flow}\label{subsec:data-flow-and-integration}
 All components have access to the databases that act as a shared representation of project data.
 There a few miscellaneous objects for exposing globally constant values.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/c4-diagram}
+    \caption{Architecture}
+    \label{fig:architecture}
+\end{figure}
+
 The typical workflow consists of the following steps:
 
 \begin{enumerate}
@@ -30,6 +38,50 @@ The typical workflow consists of the following steps:
     \item Actions run business logic using database records or delegate processing to other system components.
     \item Response is aggregated and rendered in desired format to the user.
 \end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [
+        node distance=2.5cm,
+        lane/.style={draw, minimum width=16cm, minimum height=1.5cm, anchor=west},
+        activity/.style={draw, rectangle, minimum width=2.8cm, minimum height=0.8cm},
+        arrow/.style={->, thick}
+        ]
+
+        \node[lane, label={[anchor=west]west:\textbf{Client}}] (client) at (0,4) {};
+        \node[lane, label={[anchor=west]west:\textbf{Routing}}] (routing) at (0,2.5) {};
+        \node[lane, label={[anchor=west]west:\textbf{Actions}}] (actions) at (0,1) {};
+        \node[lane, label={[anchor=west]west:\textbf{Components}}] (components) at (0,-0.5) {};
+        \node[lane, label={[anchor=west]west:\textbf{Database}}] (db) at (0,-2) {};
+
+        \node[activity] (req) at (3,4) {Request};
+        \node[activity] (response) at (13,4) {Response};
+
+        \node[activity] (route) at (5,2.5) {Action Selection};
+
+        \node[activity] (action) at (7,1) {Execute Action};
+
+        \node[activity] (logic) at (11,-0.5) {Business Logic};
+
+        \node[activity] (env) at (9,-2) {Environment};
+        \node[activity] (query) at (13,-2) {Records};
+
+        \draw[arrow, blue] (req) |- (route);
+        \draw[arrow, blue] (route) |- (action);
+        \draw[arrow, blue] (action) |- (logic);
+        \draw[arrow, blue] (action) |- (env);
+        \draw[arrow, blue] (logic) |- (query);
+
+        \draw[arrow, red] (route) -| node[pos=0.25, above] {Action not found} (response);
+        \draw[arrow, red] (action) -| node[pos=0.25, above] {Bad request} (response);
+
+        \draw[arrow, green] (logic) -| (response);
+
+    \end{tikzpicture}
+    \caption{System Request Processing}
+    \label{fig:system-request-processing}
+\end{figure}
 
 This pipeline-oriented design enables skipping defined steps if needed.
 
