@@ -1,0 +1,226 @@
+\subsection{Component-Level Architecture}\label{subsec:component-architecture}
+This section addresses challenges faced during implementation of each component.
+
+
+
+\subsubsection*{Routing}
+The routing mechanism is responsible for mapping request paths to actions.
+During implementation, several challenges arise:
+
+\begin{itemize}
+    \item Internal structure - The initial solution used naive tree implementation, which lacked proper edge definitions.
+        This problem manifested through convoluted rules during traversal, that made adding more features increasingly difficult.
+        The structural problem was solved by proper implementation of general graph collection and using modified graph
+        traversal algorithms.
+        Implementation of proper graph collection enabled adding data to connections for reasons beyond routing.
+        Simplest example of this feature are menu routes that contain route definition, labels for each segment, and optional icon.
+    \item Ambiguity of routes - Routes are dynamic templates for request paths including static and variable parts of a path's segment.
+        Segments are marked by their type, which holds precedence rules.
+        Search results are aggregated and sorted by the precedence rules to ensuring deterministic order of search results.
+    \item Route template evaluation - The system may include hundreds of routes and each of them may be evaluated during search.
+        Each route is parsed into intermediate object representation by custom-made route compiler using the compiler architecture~\parencite{appel2000_compiler_design}.
+\end{itemize}
+
+Examples of routes:
+\begin{verbatim}
+    / - Get current node.
+    /** - Match all segments after **. This definition is
+        least descriptive thus it has the lowest prescedence.
+    /foo - Match static "foo"
+    /[foo] - Save first segment as "foo" variable
+    /foo/[bar] - Match first segment as static "foo"
+        and save the value of second segment to the "bar" variable
+    /foo/bar-[id] - Match first segment as static "foo"
+        and match the second segment as "bar-"
+        and save the remainder to the "id" variable
+\end{verbatim}
+
+
+
+\subsubsection*{Database Layer}
+Tha main challenge when developing the database abstraction, was providing clear and expressive configuration.
+The implementation of the configuration had to be performant enough to be accessed multiple times for each outgoing query.
+Working with JDBC (Java Database Connection) library inspired the code with metadata approach using class attributes.
+The database layer abstracts tables through PHP classes.
+Each model declares its database connection, associated table, and table columns through PHP attributes.
+
+Example of mapping users table to the User class:
+\begin{verbatim}
+    #[Database(App::DATABASE)]
+    #[Table('users')]
+    class User extends Model {
+        #[Column('id_user', Column::TYPE_INTEGER, primaryKey: true)]
+        protected int $id;
+
+        #[Column('name', Column::TYPE_STRING)]
+        protected string $name;
+    }
+\end{verbatim}
+
+From this definition, the system is capable of:
+
+\begin{itemize}
+    \item Executing standard fetch queries (first, all, fromId, and count number of records for given condition).
+    \item Creating new User records in database.
+    \item Updating a User record.
+    \item Deleting a User record.
+\end{itemize}
+
+All Query function uses parametrized query if needed.
+For example to remove record from users table with id 4.
+
+\begin{verbatim}
+    // Creates DeleteQuery object
+    $query = Sql::delete('users');
+
+    // DELETE query is requred to have where clause
+    // Query::infer automatically infers the parameter type (TYPE_INTEGER)
+    $query->where(Query::infer('id_user = ?', 4));
+\end{verbatim}
+
+If the developers use provided Query classes correctly there shall never be SQL injection.
+The Database Layer provides default fetching functions first and all which uses the same Query object.
+Default implementation of first and all functions return one or many instances of model objects.
+Fetch function uses the projection parameter to add developer defined SQL query projection optimization.
+Implementation of Database Layer does not use the \("\)SELECT *\("\) projection variant although SelectQuery objects
+uses it if projection is not set.
+Not defining projection for SelectQuery is not encouraged.
+
+\begin{verbatim}
+    // Returns record with the id 4
+    // populating all column properties on the User object
+    // SELECT id_user, name FROM ...
+    User::first(where: Query::infer('id_user = ?', 4));
+
+    // Returns record with the id 4
+    // populating only columns defined in projection array
+    // SELECT name FROM ...
+    User::first(
+        projection: ['name'],
+        where: Query::infer('id_user = ?', 4)
+    );
+
+    // When using select query directly projection
+    // may not be set and thus the * is used.
+    // Uses SELECT * FROM ...
+    $query = Sql::select('users')
+        ->where(Query::infer('id_user = ?', 4));
+\end{verbatim}
+
+Defining custom ORM database interface provides control how the features are implemented and integrated into the system.
+
+
+
+\subsubsection*{Asset Loading (SideLoader)}
+The SideLoader component introduces asynchronous asset handling, which complicates an otherwise synchronous server-side
+rendering pipeline.
+
+Observed issues:
+\begin{itemize}
+    \item Context independent importing - The core problem that SideLoader addresses is importing assets for code that
+        is injected into the HTML page during rendering or loaded asynchronously when HTML components are fetched through AJAX\@.
+        The solution uses unique identifier for each asset file and endpoint that accepts list of identifiers and returns asset blob.
+        During rendering all assets are caught by the corresponding import functions and list of identifiers is generated.
+        If response includes HTML head element, the import call to the endpoint is injected into the head otherwise
+        the list is passed through custom HTTP header in the response and JavaScript injects import element into the head.
+    \item Dependency resolution - For the sake of simplicity, the dependencies are not resolved and all assets need to imported
+        explicitly.
+    \item Debugging - JavaScript files requires certain order of importing the scripts.
+        Static loading for all pages of commonly used libraries solves most of the issues with incorrect import order.
+        For the remaining cases, custom events are dispatched when code is imported.
+\end{itemize}
+
+
+
+\subsubsection*{Translation System}
+The translation system uses static text as keys, which simplifies integration but introduces constraints:
+
+\begin{itemize}
+    \item Coupling - If default language is changed all the UI text need to be changed as well because the static text are written
+        in default language.
+        If request requires the default language the the system returns the static text to improve performance.
+    \item Refactoring - When refactoring the static texts the system creates new database records.
+        The system can not determine unused keys, and so they are left in database showing in administration dashboard.
+    \item Ambiguity - Each key requires translation group to resolve ambiguous keys.
+        The group-key pair should always correspond to only one static text.
+\end{itemize}
+
+Example usage of the translation system:
+\begin{verbatim}
+    // MyUiComponent.php
+    class MyUiComponent implementes View {
+        // UI rendering code ...
+
+        // Provides shorthand methods for static text translation
+        use LexiconUnit;
+
+        public function __construct() {
+            $this->setLexiconGroup("example.group");
+        }
+    }
+
+    // MyUiComponent.phtml
+    <button>
+        <!-- Creates a new pairing: (exmaple.group and Submit) -->
+        <!-- and searches for correct translation -->
+        <?= $this->tr("Submit") ?>
+    <button>
+\end{verbatim}
+
+
+
+\subsubsection*{Administration Interface}
+The administration system automates CRUD operations based on database models.
+While this reduces development effort, it introduces constraints:
+
+\begin{itemize}
+    \item Workflows - The administration dashboard handles simple CRUD well, but they lack data validation logic.
+        If validation is required, then editor behavior needs to implemented.
+        The editor behavior is solution to most common create/update feature requests.
+        It supports custom form creation and on submit validation while editor takes care of form submission and model creating/updating.
+    \item Database structure - It is limitation of the current system that it only works with built-in SQL connections.
+        The problem is acknowledged but not addressed further.
+    \item Grid - The current system supports custom grid rows definitions, but they have to be descendant of Model class.
+        This means, if the row is composed of multiple database tables either each rows explodes into multiple database calls
+        during rendering or new abstract model needs to be implemented to wrap results of complicated select queries.
+    \item Menu routes - The administration dashboard required side menu for navigation.
+        Naive implementation of showing the route segment to the user would work, but it is not ideal for the user,
+        since url paths do not support spaces and other special character.
+        This problem was solved by implementing proper graph collection described in the Routing section.
+\end{itemize}
+
+
+
+\subsubsection*{Testing}
+The testing component is designed for simplicity, but this simplicity leads to:
+
+\begin{itemize}
+    \item Complex testing scenarios - The current system does not support testing beyond simple unit tests.
+    \item Implementation - The library used for testing is implemented naively and lacks in implementation quality.
+    \item Manual inspection - The results of tests needs to be viewed on the administration dashboard and currently
+        does not support running tests automatically and notifying about the results.
+\end{itemize}
+
+Example of simple unit tests using the library:
+\begin{verbatim}
+    // utils.php
+    Sptf::test("match arrays", function () {
+        Sptf::expect(Arrays::equal([], []))->toBe(true);
+        Sptf::expect(Arrays::equal([1], [1]))->toBe(true);
+        Sptf::expect(Arrays::equal([1], []))->toBe(false);
+        Sptf::expect(Arrays::equal(["foo" => "bar"], ["foo" => "bar"]))
+            ->toBe(true);
+        Sptf::expect(Arrays::equal(["foo" => "bar"], ["bar" => "foo"]))
+            ->toBe(false);
+    });
+    // Results: PASS 0.00s "match arrays" 5 assertions
+
+    Sptf::test("reverse array", function () {
+        $array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        Sptf::expect([...Arrays::reversed($array)])
+            ->compare(fn($a, $b) => Arrays::equal($a, $b))
+            ->toBe(array_reverse($array));
+    });
+    // Results: PASS 0.00s "reverse array" 1 assertions
+\end{verbatim}

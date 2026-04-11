@@ -1,0 +1,66 @@
+\section{System Architecture}\label{sec:system-architecture}
+This section describes the challenges encountered during implementation of proposed design and techniques used to solve them.
+The design expects full independence between system's components, in practice, some coupling emerges due to accessing shared
+resources, execution order, communication, and code reuse.
+
+The architecture follows a hybrid approach combining:
+\begin{itemize}
+    \item Centralized data access through shared database connections.
+    \item Globally accessible Request and Response objects.
+    \item Interface-driven communication between components.
+    \item Developer constants are defined in respective classes serving static key-value look-up tables.
+\end{itemize}
+
+This approach provides easily accessible datasets, that are needed in all parts of the system.
+
+\input{arch/components}
+
+\subsection{Data Flow and Execution Model}\label{subsec:architecture-data-flow}
+
+Although the design suggests a clean pipeline, the actual execution model includes
+additional complexity:
+
+\begin{itemize}
+    \item Implicit dependencies between components
+    \item Shared mutable state through database connections
+    \item Conditional execution paths based on runtime context
+\end{itemize}
+
+These factors make the system harder to reason about compared to the idealized
+pipeline model.
+
+\subsection{Cross-Cutting Concerns}\label{subsec:cross-cutting-concerns}
+
+Several concerns affect multiple components simultaneously:
+
+\begin{itemize}
+    \item \textbf{Performance:} Abstractions introduce overhead, especially in routing
+    and database access.
+    \item \textbf{Consistency:} Shared data access increases risk of inconsistent state.
+    \item \textbf{Scalability:} Tight coupling through shared resources limits horizontal scaling.
+    \item \textbf{Debugging:} Indirect interactions between components complicate tracing errors.
+\end{itemize}
+
+These concerns highlight the gap between theoretical design and practical implementation.
+
+\subsection{Architectural Trade-offs}\label{subsec:architectural-tradeoffs}
+
+The implementation reflects several key trade-offs:
+
+\begin{itemize}
+    \item Simplicity vs. flexibility
+    \item Abstraction vs. performance
+    \item Automation vs. control
+\end{itemize}
+
+In many cases, decisions favor simplicity and rapid development over long-term
+scalability and robustness, which is consistent with the prototype nature of the system.
+
+\subsection{Summary}\label{subsec:architecture-summary}
+
+The system architecture exposes the complexity hidden behind the high-level design.
+While the design goals emphasize modularity and extensibility, the implementation
+reveals constraints imposed by shared data, abstraction layers, and component interaction.
+
+The resulting architecture represents a compromise between theoretical design
+principles and practical feasibility, highlighting areas for future refinement.
