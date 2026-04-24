@@ -7,19 +7,36 @@ This section addresses challenges faced during implementation of each component.
 The routing mechanism is responsible for mapping request paths to actions.
 During implementation, several challenges arise:
 
-\begin{itemize}
-    \item Internal structure - The initial solution used naive tree implementation, which lacked proper edge definitions.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.5\linewidth}|p{0.5\linewidth}|}
+        \hline
+        \textbf{Challenge} & \textbf{Solution} \\
+        \hline
+        Internal structure
+        &
+        The initial solution used naive tree implementation, which lacked proper edge definitions.
         This problem manifested through convoluted rules during traversal, that made adding more features increasingly difficult.
         The structural problem was solved by proper implementation of general graph collection and using modified graph
         traversal algorithms.
         Implementation of proper graph collection enabled adding data to connections for reasons beyond routing.
-        Simplest example of this feature are menu routes that contain route definition, labels for each segment, and optional icon.
-    \item Ambiguity of routes - Routes are dynamic templates for request paths including static and variable parts of a path's segment.
+        Simplest example of this feature are menu routes that contain route definition, labels for each segment, and optional icon. \\
+        \hline
+        Ambiguity of routes
+        &
+        Routes are dynamic templates for request paths including static and variable parts of a path's segment.
         Segments are marked by their type, which holds precedence rules.
-        Search results are aggregated and sorted by the precedence rules to ensuring deterministic order of search results.
-    \item Route template evaluation - The system may include hundreds of routes and each of them may be evaluated during search.
-        Each route is parsed into intermediate object representation by custom-made route compiler using the compiler architecture~\parencite{appel2000_compiler_design}.
-\end{itemize}
+        Search results are aggregated and sorted by the precedence rules to ensuring deterministic order of search results. \\
+        \hline
+        Route template evaluation
+        &
+        The system may include hundreds of routes and each of them may be evaluated during search.
+        Each route is parsed into intermediate object representation by custom-made route compiler using the compiler architecture. \\
+        \hline
+    \end{tabular}
+    \caption{Challenges and Solutions of Routing Implementation}
+    \label{tab:cs-routing}
+\end{table}
 
 Examples of routes:
 \begin{verbatim}
@@ -40,8 +57,23 @@ Examples of routes:
 \subsubsection*{Database Layer}
 Tha main challenge when developing the database abstraction, was providing clear and expressive configuration.
 The implementation of the configuration had to be performant enough to be accessed multiple times for each outgoing query.
-Working with JDBC (Java Database Connection) library inspired the code with metadata approach using class attributes.
-The database layer abstracts tables through PHP classes.
+Working with JPA~\parencite{oracle_javaee6_tutorial} inspired to annotate the code with metadata using class attributes.
+
+The database layer implements ORM built from ground up to fit the system needs.
+Some ORMs have been reviewed and the abstractions used did not fit the style of the system and most of the features
+that the abstractions enabled would not be used wither way.
+The system's ORM is built to fulfill the needs of the system while not adding extra features.
+To enable the ORM to fit into the architecture some areas had to be written in unconventional style:
+
+\begin{itemize}
+    \item No classes similar to types of managers are present in the implementation.
+    \item Persistence of an entity instance (database record) is moved to the Model class from EntityManager~\parencite{cycle_orm_crd}.
+    \item Standard fetching functions are defined in the Model class as static functions.
+    \item Special fetching functions are defined in the record's associated class.
+    \item Query parameters are coupled with the code snippet.
+\end{itemize}
+
+The ORM abstracts tables through PHP classes.
 Each model declares its database connection, associated table, and table columns through PHP attributes.
 
 Example of mapping users table to the User class:
@@ -74,6 +106,7 @@ For example to remove record from users table with id 4.
     $query = Sql::delete('users');
 
     // DELETE query is requred to have where clause
+    // Query code snippet and parameter value coupling
     // Query::infer automatically infers the parameter type (TYPE_INTEGER)
     $query->where(Query::infer('id_user = ?', 4));
 \end{verbatim}
@@ -115,25 +148,59 @@ Defining custom ORM database interface provides control how the features are imp
 The SideLoader component introduces asynchronous asset handling, which complicates an otherwise synchronous server-side
 rendering pipeline.
 
-Observed issues:
-\begin{itemize}
-    \item Context independent importing - The core problem that SideLoader addresses is importing assets for code that
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.5\linewidth}|p{0.5\linewidth}|}
+        \hline
+        \textbf{Challenge} & \textbf{Solution} \\
+        \hline
+        Context independent importing
+        &
+        The core problem that SideLoader addresses is importing assets for code that
         is injected into the HTML page during rendering or loaded asynchronously when HTML components are fetched through AJAX\@.
         The solution uses unique identifier for each asset file and endpoint that accepts list of identifiers and returns asset blob.
         During rendering all assets are caught by the corresponding import functions and list of identifiers is generated.
         If response includes HTML head element, the import call to the endpoint is injected into the head otherwise
-        the list is passed through custom HTTP header in the response and JavaScript injects import element into the head.
-    \item Dependency resolution - For the sake of simplicity, the dependencies are not resolved and all assets need to imported
-        explicitly.
-    \item Debugging - JavaScript files requires certain order of importing the scripts.
+        the list is passed through custom HTTP header in the response and JavaScript injects import element into the head. \\
+        \hline
+        Dependency resolution
+        &
+        For the sake of simplicity, the dependencies are not resolved and all assets need to imported explicitly. \\
+        \hline
+        Debugging
+        &
+        JavaScript files requires certain order of importing the scripts.
         Static loading for all pages of commonly used libraries solves most of the issues with incorrect import order.
-        For the remaining cases, custom events are dispatched when code is imported.
-\end{itemize}
+        For the remaining cases, custom events are dispatched when code is imported. \\
+        \hline
+    \end{tabular}
+    \caption{Challenges and Solutions of Asset Loading}
+    \label{tab:cs-sideloader}
+\end{table}
+
+Example of importing CSS and JavaScript files from view template:
+
+\begin{verbatim}
+    // Project structure
+    Directory
+    |-- Component.php   // controller
+    |-- Component.phtml // template
+    |-- component.js
+    |-- component.css
+
+    // Component.phtml
+    <?php
+        // Context-independent asset loading
+        Javascript::import($this->getResource('component.js'));
+        Css::import($this->getResource('component.css'));
+    ?>
+\end{verbatim}
 
 
 
 \subsubsection*{Translation System}
-The translation system uses static text as keys, which simplifies integration but introduces constraints:
+The translation system uses static text as keys, which simplifies integration but introduces constraints,
+that limit the functionality of the solution:
 
 \begin{itemize}
     \item Coupling - If default language is changed all the UI text need to be changed as well because the static text are written
@@ -186,8 +253,41 @@ While this reduces development effort, it introduces constraints:
     \item Menu routes - The administration dashboard required side menu for navigation.
         Naive implementation of showing the route segment to the user would work, but it is not ideal for the user,
         since url paths do not support spaces and other special character.
-        This problem was solved by implementing proper graph collection described in the Routing section.
 \end{itemize}
+
+The menu routes constraint is solved by by implementing proper graph collection described in the Routing section.
+
+Example of binding CRUD controller with autogenerated form and grid from Model annotations and with CRUD privilege
+configuration object, that handles if logged-in user has sufficient privileges for operations.
+
+\begin{verbatim}
+    // Admin::createMenu($router)
+
+    // Create CRUD controller for domains
+    $domains = new AdminNexus(
+        ModelDescription::extract(Domain::class),
+
+        // Default autogenerated form from annotations
+        FormDescription::getEditor(Domain::class),
+
+        // Default autogenerated grid from annotations
+        GridDescription::extract(Domain::class),
+    );
+
+    // Set privilege configuration object
+    $domains->setUserResource(
+        UserResource::getSystemResource(
+            RouteChasmEnvironment::USER_RESOURCE_DOMAIN
+        )
+    );
+
+    // Bind to /domains route with Domains label and custom icon
+    $domains->setRouter(
+        Route::menu("/Domains")
+            ->icon("Domains", Icon::nf('nf-md-web')),
+        $router
+    );
+\end{verbatim}
 
 
 
@@ -223,4 +323,76 @@ Example of simple unit tests using the library:
             ->toBe(array_reverse($array));
     });
     // Results: PASS 0.00s "reverse array" 1 assertions
+\end{verbatim}
+
+
+
+\subsubsection*{Communication with Generative AI}
+Communication system with APIs for LLMs follows similar paradigm to handling HTTP requests without the need for routing.
+Couple of challenges were encountered early on:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.5\linewidth}|p{0.5\linewidth}|}
+        \hline
+        \textbf{Challenge} & \textbf{Solution} \\
+        \hline
+        Support for multiple platforms
+        &
+        For the sake of simplicity, only one solution for OpenAI API is implement. \\
+        \hline
+        Rendering requests
+        &
+        The communication with the API uses the JSON format, which is supported by the View system.
+        Thus, requests are implemented as Views that render into JSON strings defining the response schema. \\
+        \hline
+        Ensuring response structure
+        &
+        Large Language Models do not generate deterministic outputs, and relying
+        on prompt instructions to enforce a format is unreliable.
+        To combat this issue, the OpenAI API provides schema-based JSON response enforcement.
+        All the schema definitions were implemented into custom ORM solution that generates valid schema.
+        Same schemas cannot be defined, for instance recursive structures.
+        In those cases generic JSON response is enforced and the expected structure is defined in the prompt messages.
+        \\
+        \hline
+    \end{tabular}
+    \caption{Challenges and Solutions of Communication with Generative AI}
+    \label{tab:cs-generative-ai}
+\end{table}
+
+Implementation of the communication system is straightforward because most of the heavy lifting is done in systems
+that is already present in the codebase.
+
+Example of requesting website sources using OpenAi client:
+\begin{verbatim}
+    // Creates client using the API key and model defined in .env file
+    $client = OpenAi::fromEnv();
+    $request = $client->createRequest();
+
+    // Create schema: { html: string, css: string, js: string }
+    $schema = new Schema(
+        'webpage_generation',
+        (new ObjectSchema())
+            ->add('html', new StringSchema())
+            ->add('css', new StringSchema())
+            ->add('js', new StringSchema())
+            ->setRequired(['html', 'css', 'js'])
+    );
+
+    // Use the prompt from request
+    $userPrompt = $body->get(self::NAME_PROMPT);
+
+    $request
+        ->setSchema($schema)
+        // View with multiple message templates (system and user)
+        ->add(new PageGeneration(InputMessage::ROLE_SYSTEM, $userPrompt))
+        ->add(new PageGeneration(InputMessage::ROLE_USER, $userPrompt));
+
+    // $client->chat() - Returns raw response containing all properties
+    // $client->parseResponse() - Returns only the message generated by LLM
+    $response = $client->parseResponse($client->chat($request));
+    if (!is_null($response)) {
+        // Handle reponse from LLM
+    }
 \end{verbatim}

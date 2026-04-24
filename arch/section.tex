@@ -1,66 +1,50 @@
 \section{System Architecture}\label{sec:system-architecture}
 This section describes the challenges encountered during implementation of proposed design and techniques used to solve them.
 The design expects full independence between system's components, in practice, some coupling emerges due to accessing shared
-resources, execution order, communication, and code reuse.
+resources, execution order, communication, and reuse of code sections.
 
 The architecture follows a hybrid approach combining:
 \begin{itemize}
     \item Centralized data access through shared database connections.
     \item Globally accessible Request and Response objects.
     \item Interface-driven communication between components.
-    \item Developer constants are defined in respective classes serving static key-value look-up tables.
+    \item Developer constants are defined in respective classes serving as static key-value look-up tables.
+    \item Tooling for performing AI-Generation task are implemented as a part of the system.
 \end{itemize}
 
 This approach provides easily accessible datasets, that are needed in all parts of the system.
 
 \input{arch/components}
 
-\subsection{Data Flow and Execution Model}\label{subsec:architecture-data-flow}
-
-Although the design suggests a clean pipeline, the actual execution model includes
-additional complexity:
+\subsection{Data Flow}\label{subsec:architecture-data-flow}
+The design suggests a clean pipeline, but the actual execution model includes additional complexity:
 
 \begin{itemize}
-    \item Implicit dependencies between components
-    \item Shared mutable state through database connections
-    \item Conditional execution paths based on runtime context
+    \item Dependencies between components.
+    \item Shared mutable and immutable states.
+    \item Alternative execution paths based on runtime context.
+    \item Configuration scattered over various number of media such as: .env file, immutable constants, and keys referencing database records.
 \end{itemize}
 
-These factors make the system harder to reason about compared to the idealized
-pipeline model.
-
-\subsection{Cross-Cutting Concerns}\label{subsec:cross-cutting-concerns}
-
-Several concerns affect multiple components simultaneously:
-
-\begin{itemize}
-    \item \textbf{Performance:} Abstractions introduce overhead, especially in routing
-    and database access.
-    \item \textbf{Consistency:} Shared data access increases risk of inconsistent state.
-    \item \textbf{Scalability:} Tight coupling through shared resources limits horizontal scaling.
-    \item \textbf{Debugging:} Indirect interactions between components complicate tracing errors.
-\end{itemize}
-
-These concerns highlight the gap between theoretical design and practical implementation.
+These factors make the system execution convoluted compared to the idealized pipeline model.
 
 \subsection{Architectural Trade-offs}\label{subsec:architectural-tradeoffs}
-
-The implementation reflects several key trade-offs:
+Multiple trade-offs were encountered while implementing every component:
 
 \begin{itemize}
-    \item Simplicity vs. flexibility
-    \item Abstraction vs. performance
-    \item Automation vs. control
+    \item Simplicity vs.\ Flexibility
+    \item Abstraction vs.\ Performance
+    \item Automation vs.\ Control
 \end{itemize}
 
-In many cases, decisions favor simplicity and rapid development over long-term
-scalability and robustness, which is consistent with the prototype nature of the system.
+Most of the time, implementation favors simplicity, abstraction, and control for the ease of development.
+This decision makes parts of the system fragile and prone to suboptimal architecture.
 
 \subsection{Summary}\label{subsec:architecture-summary}
-
 The system architecture exposes the complexity hidden behind the high-level design.
-While the design goals emphasize modularity and extensibility, the implementation
-reveals constraints imposed by shared data, abstraction layers, and component interaction.
+While the design goals emphasize simplicity, modularity, and extensibility, the implementation reveals constraints
+imposed by abstractions, dependencies, complex configuration, and numerous edge cases.
 
-The resulting architecture represents a compromise between theoretical design
-principles and practical feasibility, highlighting areas for future refinement.
+The resulting architecture is a compromise between idealized design and practicality.
+The prototype nature enables this kind of implementation and systems such as administration dashboard, configuration, routing, and testing
+are going to be the first candidates for refactoring to get closer to the ideal implementation.

@@ -8,7 +8,7 @@ The design emphasizes simplicity and ease of integration, allowing the component
 
 The key design goals are:
 \begin{itemize}
-    \item Simplicity - The system interface is simple and similar and the implementation of programming patterns is consistent.
+    \item Simplicity - The system interface is simple and the implementation of programming patterns is consistent.
     \item Modularity - The system is divided into components.
     \item Extensibility - New functionality can be added to existing components.
     \item Automation - Repetitive development tasks should be automated with AI if possible.
@@ -21,7 +21,8 @@ These goals reflect the prototype nature of the system, which aims to explore au
 
 \subsection{System Data Flow}\label{subsec:data-flow-and-integration}
 All components have access to the databases that act as a shared representation of project data.
-There a few miscellaneous objects for exposing globally constant values.
+Environment settings are not limited to using database as persistent data storage.
+Some values are better stored as constant values.
 
 \begin{figure}[H]
     \centering
@@ -33,9 +34,9 @@ There a few miscellaneous objects for exposing globally constant values.
 The typical workflow consists of the following steps:
 
 \begin{enumerate}
-    \item Creation of request specific data objects and database connections are established.
+    \item Creation of request specific data objects and establishing database connections.
     \item Execution of actions responsible for handling the request.
-    \item Actions run business logic using database records or delegate processing to other system components.
+    \item Actions run the business logic using database records or delegate processing to other system components.
     \item Response is aggregated and rendered in desired format to the user.
 \end{enumerate}
 
@@ -78,12 +79,33 @@ The typical workflow consists of the following steps:
 
         \draw[arrow, green] (logic) -| (response);
 
+        % Legend
+        \node[draw, align=left, anchor=north east] at (16,-3) {
+            \begin{tikzpicture}[arrow/.style={->, thick}]
+                \draw[arrow, blue] (0,0) -- (1,0) node[right, black] {Normal flow};
+                \draw[arrow, red] (0,-0.5) -- (1,-0.5) node[right, black] {Error flow};
+                \draw[arrow, green] (0,-1) -- (1,-1) node[right, black] {Successful response};
+            \end{tikzpicture}
+        };
     \end{tikzpicture}
     \caption{System Request Processing}
     \label{fig:system-request-processing}
 \end{figure}
 
-This pipeline-oriented design enables skipping defined steps if needed.
+This swimming lanes diagram shows lifetime of request with database access.
+User sends request to access a resource and the system finds appropriate action or actions responsible for handling the request.
+The actions may not be found for multiple reasons, for example, actions are not found,
+or required properties are not present in the request.
+When multiple actions are found, they are executed in predefined order.
+Action execution describes the process of performing all found actions.
+The process may result in failure at any point of the execution, it is terminated immediately, and response
+containing failure details is sent to the user.
+Actions are abstraction for any arbitrary code that generates response based on the request or forwards the responsibility to another action.
+Components are concrete instances of the code.
+In this example, the component accesses environment data stored in database, which may include system settings or user privileges,
+and reads additional records tied to the requested resource.
+If no failures are encountered, successful response is generated from all the gathered inputs and sent.
+
 
 \subsection{Summary}\label{subsec:summary}
 The proposed design emphasizes simplicity, abstraction, and extensibility.
