@@ -1,0 +1,101 @@
+\section{Using the Prototype To Create Websites}\label{sec:creation-process-of-websites}
+This section focuses on explaining the process of setting up the prototype framework, RouteChasm~\parencite{github_routechasm}, and using it to create
+three websites of varying types:
+
+\begin{itemize}
+    \item Personal - Chrome browser extension for widget-oriented New Tabs~\parencite{github_startuh}
+    \item Corporate - Software Agency advertising their services, projects, and blog articles~\parencite{github_strata}
+    \item Content-driven - Administrator curated repository of recipes and cooking related articles~\parencite{github_savora}
+\end{itemize}
+
+The websites are testing the following sections:
+
+\begin{itemize}
+    \item CMS components
+    \item AI generation (Page Structure Generation, Article Generation, Static Page Generation, Page Component Generation, Documentation Generation)
+    \item Development metrics (Requirement Coverage, Number of Manual Edits, Time to Publish, Responsiveness, and Basic SEO)
+\end{itemize}
+
+\subsection{PHP and MySQL set up}\label{subsec:php-and-mysql-setup}
+The recommended way to host the application locally is by installing Wampserver~\parencite{wampserver}.
+Download the full version of Wampserver, this will include PHP server, MySQL server, and PHPMyAdmin to manage the MySQL server.
+While installing the Wampserver you might need to install Visual C++ Redistributable Packages for your system which can
+also be found on the Wampserver website.
+
+After installing and running it, download cacert.pem file, and add absolute location to the file to the curl.cainfo field
+in php.ini file.
+This will enable the server side AI generation requests.
+
+\subsection{Initial setup}\label{subsec:initial-setup}
+For each website the following shell code was executed to create project directory, download the latest version of
+the framework, and change the remote origin (GitHub repository).
+
+\begin{verbatim}
+    # Download the framework
+    git clone https://github.com/CaptSiro/route-chasm.git <project-name>
+    cd <project-name>
+
+    # Remove project's git history (recommended through file explorer)
+    rm -rf .git
+    # Create the project's local repository
+    git init
+
+    # Push the framework to the origin
+    git remote add origin <project-git>
+    git add .
+    git commit -m "Initial commit from RouteChasm"
+    git branch -M main
+    git push -u origin main
+\end{verbatim}
+
+Before the project is ready for local testing a few configuration files needs to be updated.
+The .htaccess file routes all the requests to a singular file and the framework takes care of the individual request resolution.
+By default, this file routes the requests to the file route-chasm/index.php but the real location of the index.php file
+depends on where the project is located in relation to the web server's root directory.
+Most of the time, the web server's root directory is the parent directory of the project.
+
+\begin{verbatim}
+    ...
+    RewriteRule (.*) /<project-name>/index.php [QSA,END]
+    ...
+\end{verbatim}
+
+Now, any incoming requests are handled but the framework lacks environment specific configuration.
+By default, the framework tries to get all the configuration from the .env file.
+The file is not provided in the framework repository, because it defines sensitive information, for example, root login details,
+database user login, and api keys.
+The .env file must be created and edited by hand.
+The following .env template contains all the fields used by the framework with sample values.
+
+\begin{verbatim}
+    VERSION=1.0.2
+
+    PROJECT=<Project-Name>
+    PROJECT_LINK=<project-git>
+    PROJECT_AUTHOR=<Project-Author>
+    PROJECT_AUTHOR_LINK=<project-author-link>
+
+    LANGUAGE=en-US
+    DOMAIN_URL=<deploy-url>
+
+    DATABASE_HOST=127.0.0.1
+    DATABASE_NAME=routechasm
+    DATABASE_USER=root
+    DATABASE_PASSWORD=root
+
+    ADMIN_LOGIN_PASSWORD=root
+
+    OPENAI_KEY=<api-key>
+    OPENAI_MODEL=gpt-4o-mini
+\end{verbatim}
+
+Login to the database manager (PHPMyAdmin recommended and preinstalled in Wampserver) and create new database.
+Locate the src/core/sql/init.sql file and run it in the database.
+This will create empty RouteChasm database.
+
+The framework is ready to be used.
+
+\pagebreak
+
+\input{projects/corporate}
+
