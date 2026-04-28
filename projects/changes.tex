@@ -1,0 +1,64 @@
+\subsection{Common Changes}\label{subsec:common-changes}
+This section is going to address a few common changes, that can be applied to the framework.
+
+\subsubsection*{Adding Meta Description to Homepage}
+All pages created through administration dashboard include textarea to fill in meta description.
+The homepage component is defined in src/components/Home/Home.php.
+In the constructor the HtmlHead is created, and it includes function to add meta fields.
+Adding description editable through web settings can be added this way:
+
+\begin{verbatim}
+    parent::__construct(
+        new ContextAwareWebPage(
+            // Save the HtmlHead to variable
+            head: $head = new HtmlHead(...)
+        )
+    );
+
+    $description = Setting::fromName(
+        'project:homepage-description',
+        // Create the setting if it is not defined
+        true,
+        // Default description
+        '',
+        // Makes the setting editable in admin dashboard
+        [PROPERTY_EDITABLE => true]
+    );
+
+    $head->addMeta('description', $description->toString());
+\end{verbatim}
+
+\subsubsection*{Editing Homepage Button Behavior}
+Locate the src/components/Home/Home.phtml template and edit the HTML of the page.
+To add JavaScript functionality locate home.js in the same directory.
+If the script file is created it needs to be created by hand and this line of code added to the template:
+
+\begin{verbatim}
+    // getRosource function locates the file
+    // relative to the class definition of the $this object
+    Javascript::import($this->getResource('home.js'));
+\end{verbatim}
+
+Edit the script to the needs and reload the page.
+The changes should take place instantaneously.
+
+\subsubsection*{Uploading Files}
+Files can be uploaded via the administration dashboard.
+The files are limited to pages created in dashboard and can not be used natively in homepage template.
+Navigate to the Admin/File System/Files page and drag-and-drop your files on to the grid.
+Drag-and-dropping is the only way to upload files to the system.
+
+\subsubsection*{Changing Homepage Image}
+Add images to the public/images directory, locate the src/components/Home/Home.phtml template, and create or edit the
+desired HTML image element.
+The images are accessible on url: <project-domain>/public/images/<image-file>
+
+\subsubsection*{Creating Editor User}
+Navigate to the System/Groups and create new group called Editors and fill out the privileges mapping.
+Each checkbox corresponds to Resource and Action performed on the resource.
+If the checkbox is checked it means that the group has privilege to perform the action on the resource.
+
+Navigate to the System/Users and create new user.
+When creating a new user, the Tag needs to be unique for the website.
+Add the user into the Admin group which gives them the access to log into the administration dashboard
+and the newly created Editor group defines all the actions the user can perform in the dashboard.
