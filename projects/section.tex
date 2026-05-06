@@ -16,13 +16,13 @@ The websites are testing the following sections:
     \item Development metrics (Requirement Coverage, Number of Manual Edits, Time to Publish, Responsiveness, and Basic SEO)
 \end{itemize}
 
-\subsection{PHP and MySQL}\label{subsec:php-and-mysql}
+\subsection{Technical Environment}\label{subsec:technical-environment}
 The recommended way to host the application locally is by installing Wampserver~\parencite{wampserver}.
 Download the full version of Wampserver, this will include PHP server, MySQL server, and PHPMyAdmin to manage the MySQL server.
 While installing the Wampserver you might need to install Visual C++ Redistributable Packages for your system which can
 also be found on the Wampserver website.
 
-After installing and running it, download cacert.pem file, and add absolute location to the file to the curl.cainfo field
+After installing and running it, download cacert.pem file, and add the absolute location to the curl.cainfo field
 in php.ini file.
 This will enable the server side AI generation requests.
 
@@ -95,8 +95,20 @@ This will create empty RouteChasm database.
 To load in the database with data run the src/core/sql/export.sql file.
 Each project includes its own export.sql file.
 
-The framework is ready to be used.
+The framework is ready to be used and all testing projects begin with modification of the Home component
+to implement project-specific landing page.
+Since there is one instance of homepage in the system, the framework does not provide separate page template for
+the homepage and all the implementation details are contained in the src/components/Home directory,
+which includes Home.php file, that describes the interface of the component with private functions used only
+within the Home.phtml template.
+When the template is rendered, it imports the home.css styles and then renders the HTML of the page.
 
 \input{projects/corporate}
+
+\input{projects/content-driven}
+
+\input{projects/personal}
+
+\input{projects/evaluation}
 
 \input{projects/changes}

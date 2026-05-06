@@ -1,0 +1,147 @@
+\subsection{Testing section: CMS Components}\label{subsec:testing-section-cms-components}
+The system is based on a role-based access control model, which enables the administrators to create users
+and assign them to groups.
+Users inherit privileges from the groups they are part of.
+The framework defines several special groups as a part of initial configuration.
+For example, the Admin group grants implicit access to the administration dashboard.
+Even if a user are belongs a custom group,
+that grants the privilege to Page editing,
+without assigning the Admin group the user cannot log in to administration dashboard.
+
+The system lacks proper descriptions for these special groups, and requires implicit understanding of the special groups.
+
+\subsection{Testing section: AI Generation}\label{subsec:testing-section-ai-generation}
+The framework provides couple of ways to generate content more efficiently by using AI\@.
+The following table describes whether the feature was used and following paragraphs describe the quality of generated content.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.4\linewidth}|c|c|c|}
+        \hline
+        \textbf{Feature} & \textbf{Corporate} & \textbf{Content-Driven} & \textbf{Personal} \\
+        \hline
+        Page Structure Generation & Yes & Yes & No \\
+        \hline
+        Article Generation & Yes & Yes & Yes \\
+        \hline
+        Static Page Generation & Yes & Yes & No \\
+        \hline
+        Page Component Generation & Yes & No & No \\
+        \hline
+        Documentation Generation & No & No & Yes \\
+        \hline
+    \end{tabular}
+    \caption{Testing Section - AI Generation Overview}
+    \label{tab:evaluation-test-ai-overview}
+\end{table}
+
+\subsubsection*{Page Structure Generation}
+The generated structures are usable but a few pages need to be removed for each project.
+For example, sometimes the Home page needs to be removed because it is implemented via the Home component.
+A few times the AI generated the whole structure with Home being the parent.
+Due to the system limitation not allowing transferring parent-child relation to other pages the whole structure
+has to be deleted and regenerated.
+
+In the content-driven scenario, the generated structure was ready to use and only blog articles had to be filled in manually.
+
+\subsubsection*{Article Generation}
+The generated output matched the desired content but the Markdown formatting had to be manually adjusted.
+This is due to the use of a custom-made Markdown compiler, where some AI-Generated formatting choices
+lead to undefined results.
+
+\subsubsection*{Static Page Generation}
+The static contact pages are generated using AI with simple prompt without styling guides
+and detailed description of each scenario.
+Combined with the use of a smaller model, this led to lower-quality results with mismatched theme styling
+and incorrect typography.
+
+\subsubsection*{Page Component Generation}
+The page content generation is used to generate static table for corporate scenario.
+With detailed prompt the output is visually presentable but not directly usable in production.
+The issue is that generated components cannot expose editable properties or content to the editor.
+If the user wants to edit the content, the change must be explicitly stated in the prompt rather than editing the output directly.
+
+This makes the feature well-suited for drafting components in natural language and handing the output to development team
+to implement fully functional component.
+
+\subsubsection*{Documentation Generation}
+
+The framework employs on-demand documentation generation, which shifts the responsibility of correctness validation from the system to the project maintainer.
+
+This design introduces a trade-off between accessibility of undocumented code and reliability of the generated documentation.
+
+\subsubsection*{Documentation Generation}
+The Ai-Generated documentation outlines source files and lists methods of defined within each file.
+The introduction is concise, the same applies to the method descriptions.
+Due to the probabilistic nature of LLMs, the generated output varies in correctness, which is problematic in fact-driven environment,
+such as technical documentation.
+Additionally, the output is in Markdown format and inherits the same problems with formatting as Article Generation.
+
+This means that for each documentation page the project maintainer needs to verify the correctness of the generated file,
+and fix formatting before it can be declared production ready.
+The issue is that the framework uses on-demand documentation generation,
+which may expose users to incorrect and visually broken technical documentation.
+
+This design decision introduces a trade-off between accessibility and reliability of the documentation.
+
+\subsection{Testing section: Metrics Evaluation}\label{subsec:testing-section:-metrics-evaluation}
+The framework is tested on the metrics defined in the table.
+Some values are missing metrics about bug fixing the framework.
+If critical bug is encountered during the deployment, the development of fixing the bug is not counted to the metrics.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{0.23\linewidth}|p{0.23\linewidth}|p{0.23\linewidth}|p{0.23\linewidth}|}
+        \hline
+        \textbf{Evaluation Metrics}
+        &
+        \textbf{Corporate}
+        &
+        \textbf{Content-Driven}
+        &
+        \textbf{Personal} \\
+        \hline
+        Requirement Coverage
+        &
+        The only thing that had to be implemented by hand is the the homepage and since it is intended, the Requirement
+        Coverage is 100\%
+        &
+        &
+        \\
+        \hline
+        Number of Manual Interventions
+        &
+        Only one, homepage implementation
+        &
+        &
+        \\
+        \hline
+        Time to Publishable Draft
+        &
+        Measuring the time between initial commit and final commit (not counting update commits) the deployment of the website
+        took exactly one hour and two minutes.
+        &
+        &\\
+        \hline
+        Responsiveness
+        &
+        All the pages that are visible to the public are fully responsive although some elements are implemented
+        in functional but not user-friendly way.
+        The elements are header menu items on mobile devices.
+        The administration websites require custom implementation of core user controls, and thus it is only optimized
+        for desktop devices with standard landscape resolutions.
+        &
+        &\\
+        \hline
+        Basic SEO
+        &
+        Publicly accessible websites pass the SEO test if all metadata for a page are filled in.
+        The only exception is the homepage which requires manual description to be added by editing the Home component
+        directly.
+        &
+        &\\
+        \hline
+    \end{tabular}
+    \caption{Testing Section - Metrics Evaluation}
+    \label{tab:evaluation-metrics}
+\end{table}
