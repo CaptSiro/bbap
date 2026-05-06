@@ -15,13 +15,17 @@ The primary advantages of Laravel include:
     \item Active community.
 \end{itemize}
 
-Laravel implements common features, but to keep the interface simple it lacks in depth.
+Laravel implements core features, but the focus on maintaining clean programming interface it constraints the features
+in depth and flexibility.
 
 For example the view implementation lacks type safety provided by using typed objects as interfaces for rendering views.
-The calls to built-in function view may be wrapped in another function and using the parameters of the function to achieve type safety.
-This gives the developer option to either work in not type safe environment or to add unnecessary boilerplate to the application~\parencite{laravel_view}.
+The calls to the built-in function view may be wrapped in another function and using the parameters of the function to achieve type safety.
+This gives the developer option to either work in non-type-safe environment or to add unnecessary boilerplate to the application~\parencite{laravel_view}.
 
-The routing system defines routes statically at \("\)boot-up\("\) and adding more routes is not supported.
+The routing system does not support compositional route definitions in which parent routes dynamically defines nested sub-routes.
+This makes it difficult to encapsulate helper controller routes.
+For example, route which handles reordering of priority-based table found in page listings.
+
 The endpoints are stateless and are not aware of what path they are bound to.
 Which means that routes need to be explicitly named to be able to programmatically retrieve them~\parencite{laravel_routing}.
 
@@ -63,10 +67,11 @@ such as lack of type safety in views and routing definitions not implementing dy
 
 Nette focuses on clean architecture, template security, and an object-oriented approach,
 with strong support for developers in the Czech republic.
-However, some subsystems are limited in scope being only utility wrappers than fully fledged systems,
-such as console testing tools and file system does not address common web application requirements.
+However, some subsystems are limited in scope,
+functioning primarily as utility wrappers rather than full-featured systems designed for web applications.
+This includes, for example, the file system abstraction.
 
-Neither framework fully satisfies the requirements of a system that aims to provide:
+Neither framework satisfies the design goals defined in this thesis, which include:
 
 \begin{itemize}
     \item Strong type safety across all systems.

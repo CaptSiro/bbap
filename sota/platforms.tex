@@ -17,7 +17,6 @@ The primary advantages of WordPress include:
 Excessive plugin usage may introduce inconsistent behavior or even produce security problems.
 However, this flexibility comes at the cost of architectural complexity, which is partially addressed by code comments
 and in-depth documentation.
-The codebase includes many hidden pitfalls and unaddressed technical debts.
 
 From a developer perspective, WordPress is powerful but complex architecture accumulated over the years of development~\parencite{wordpress_docs_rest}.
 If the developers are satisfied with the tooling then they are going to make amazing experience for the user.
@@ -47,11 +46,12 @@ The primary limitation of Squarespace is restricted extensibility of the core sy
 Developers cannot access the underlying backend architecture to host the websites on their own servers or to modify
 core behavior.
 
-Squarespace policy places users over developers, and thus it is great for less tech-savvy users,
-but lacks in flexibility for teams of developers.
+Squarespace design philosophy prioritizes end users over developers,
+which is reflected by closed-source nature.
+This makes it is great for less tech-savvy users, but lacks in flexibility for teams of developers.
 
 \subsubsection{Platforms Comparison Summary}\label{subsubsec:platforms-comparison-summary}
-WordPress emphasizes openness and extensibility but suffers from architectural complexity and technical debts.
+WordPress emphasizes openness and extensibility but suffers from architectural complexity.
 Squarespace prioritizes simplicity but lacks customization needed for developers.
 
 From user experience I find Squarespace website editor easier to use than what WordPress provides.
@@ -66,4 +66,4 @@ Neither platform fully satisfies the requirements of a system that aims to provi
 
 The thesis solution positions itself between these two approaches:
 maintaining developer control and being open-source project similar to WordPress
-while providing easy to use experience like Squarespace defines.
+while providing easy to use interface like the one Squarespace defines.

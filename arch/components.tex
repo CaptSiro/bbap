@@ -59,9 +59,10 @@ Tha main challenge when developing the database abstraction, was providing clear
 The implementation of the configuration had to be performant enough to be accessed multiple times for each outgoing query.
 Working with JPA~\parencite{oracle_javaee6_tutorial} inspired to annotate the code with metadata using class attributes.
 
-The database layer implements ORM built from ground up to fit the system needs.
-Some ORMs have been reviewed and the abstractions used did not fit the style of the system and most of the features
-that the abstractions enabled would not be used wither way.
+The database layer implements an ORM built from ground up to fit the system needs.
+Several existing ORMs~\parencite{cycle_orm,doctrine_orm} were evaluated but their abstractions
+do not align the architectural model of the system.
+Furthermore, many of the features were deemed unnecessary and the removal of these features clarifies the programming interface.
 The system's ORM is built to fulfill the needs of the system while not adding extra features.
 To enable the ORM to fit into the architecture some areas had to be written in unconventional style:
 
@@ -111,7 +112,7 @@ For example to remove record from users table with id 4.
     $query->where(Query::infer('id_user = ?', 4));
 \end{verbatim}
 
-If the developers use provided Query classes correctly there shall never be SQL injection.
+When the provided Query classes are used as intended, SQL injection vulnerability is prevented.
 The Database Layer provides default fetching functions first and all which uses the same Query object.
 Default implementation of first and all functions return one or many instances of model objects.
 Fetch function uses the projection parameter to add developer defined SQL query projection optimization.
