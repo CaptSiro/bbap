@@ -18,17 +18,41 @@ The following table describes whether the feature was used and following paragra
     \centering
     \begin{tabular}{|p{0.4\linewidth}|c|c|c|}
         \hline
-        \textbf{Feature} & \textbf{Corporate} & \textbf{Content-Driven} & \textbf{Personal} \\
+        \textbf{Feature}
+        & \textbf{Corporate}
+        & \textbf{Content-Driven}
+        & \textbf{Personal}
+        \\
         \hline
-        Page Structure Generation & Yes & Yes & No \\
+        Page Structure Generation
+        & Yes
+        & Yes
+        & No
+        \\
         \hline
-        Article Generation & Yes & Yes & Yes \\
+        Article Generation
+        & Yes
+        & Yes
+        & Yes
+        \\
         \hline
-        Static Page Generation & Yes & Yes & No \\
+        Static Page Generation
+        & Yes
+        & Yes
+        & No
+        \\
         \hline
-        Page Component Generation & Yes & No & No \\
+        Page Component Generation
+        & Yes
+        & No
+        & No
+        \\
         \hline
-        Documentation Generation & No & No & Yes \\
+        Documentation Generation
+        & No
+        & No
+        & Yes
+        \\
         \hline
     \end{tabular}
     \caption{Testing Section - AI Generation Overview}
@@ -86,62 +110,103 @@ This design decision introduces a trade-off between accessibility and reliabilit
 
 \subsection{Testing section: Metrics Evaluation}\label{subsec:testing-section:-metrics-evaluation}
 The framework is tested on the metrics defined in the table.
-Some values are missing metrics about bug fixing the framework.
+The evaluation focuses on development effort, responsiveness, and SEO\@.
 If critical bug is encountered during the deployment, the development of fixing the bug is not counted to the metrics.
+Some metrics share identical values because they are influenced by framework-level features
+rather than by scenario-specific implementation details.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|p{0.23\linewidth}|p{0.23\linewidth}|p{0.23\linewidth}|p{0.23\linewidth}|}
+    \begin{tabular}{|p{0.32\linewidth}|c|c|c|}
         \hline
-        \textbf{Evaluation Metrics}
-        &
-        \textbf{Corporate}
-        &
-        \textbf{Content-Driven}
-        &
-        \textbf{Personal} \\
-        \hline
-        Requirement Coverage
-        &
-        The only thing that had to be implemented by hand is the the homepage and since it is intended, the Requirement
-        Coverage is 100\%
-        &
-        &
+        \textbf{Evaluation Metric}
+        & \textbf{Corporate}
+        & \textbf{Content-Driven}
+        & \textbf{Personal}
         \\
         \hline
-        Number of Manual Interventions
-        &
-        Only one, homepage implementation
-        &
-        &
+        Requirement Coverage
+        & 100\%
+        & 100\%
+        & 50\%
+        \\
+        \hline
+        Manual Interventions
+        & 1
+        & 1
+        & 6
         \\
         \hline
         Time to Publishable Draft
-        &
-        Measuring the time between initial commit and final commit (not counting update commits) the deployment of the website
-        took exactly one hour and two minutes.
-        &
-        &\\
+        & 1 hour
+        & 2 hours
+        & 10+ hours
+        \\
         \hline
-        Responsiveness
-        &
-        All the pages that are visible to the public are fully responsive although some elements are implemented
-        in functional but not user-friendly way.
-        The elements are header menu items on mobile devices.
-        The administration websites require custom implementation of core user controls, and thus it is only optimized
-        for desktop devices with standard landscape resolutions.
-        &
-        &\\
+        Public Page Responsiveness
+        & Yes
+        & Yes
+        & Yes
+        \\
         \hline
-        Basic SEO
-        &
-        Publicly accessible websites pass the SEO test if all metadata for a page are filled in.
-        The only exception is the homepage which requires manual description to be added by editing the Home component
-        directly.
-        &
-        &\\
+        Administration Responsiveness
+        & Desktop Only
+        & Desktop Only
+        & Desktop Only
+        \\
+        \hline
+        Basic SEO Readiness
+        & Partial
+        & Partial
+        & Partial
+        \\
         \hline
     \end{tabular}
-    \caption{Testing Section - Metrics Evaluation}
-    \label{tab:evaluation-metrics}
+    \caption{Metrics Evaluation Overview}
+    \label{tab:evaluation-metrics-overview}
 \end{table}
+
+\subsubsection*{Requirement Coverage}
+In corporate and content-driven scenarios, all scenario-specific are implemented by the framework.
+The only manual implemented part is custom homepage for each scenario, which is expected in framework deployment workflow
+
+In the personal scenario, all CMS features are implemented by the framework but extension-specific features
+must be implemented manually.
+This includes custom HTTP endpoints, a custom extension component with freeform widget editor different
+from webpage widget component editor, static images, extension metadata, and custom homepage.
+
+As a result, the requirement coverage for the personal scenario is estimated at approximately 50\%.
+The scenario consists of two major parts: extension-specific functionality and CMS-based functionality for advertisement and documentation.
+The framework directly supports only the CMS-related functionality, while the extension-specific systems must be implemented manually.
+
+As a result, the requirement coverage for the personal scenario is estimated at approximately 50\%.
+The scenario consists of two major parts: extension-specific features and CMS-based features for advertisement and documentation.
+The framework offers tools tailored only to the CMS-related functionality, while extension-specific part needs to be implemented manually.
+
+\subsubsection*{Manual Interventions}
+All scenarios must implement custom homepage which counts as one manual intervention.
+The personal scenario also includes extension-specific features:
+
+\begin{itemize}
+    \item Custom HTTP endpoints
+    \item Extension component
+    \item Freeform widget editor
+    \item Static images
+    \item Extension metadata
+\end{itemize}
+
+\subsubsection*{Time to Publishable Draft}
+Measured from the initial commit to the final commit related to deployment.
+Time spent bug fixing and updating the framework are excluded from the measurement.
+For the personal scenario the initial commit already includes most of the implementation due to incorrect project setup.
+This means, that time measurement metric can be estimated but not calculated.
+
+\subsubsection*{Responsiveness}
+All publicly accessible pages are responsive across tested device sizes.
+Although, some elements are implemented functionally but not optimized for usability.
+The administration dashboard interface require custom implementation of core user controls, and it is currently optimized
+for desktop devices and standard landscape resolutions.
+
+\subsubsection*{Basic SEO Readiness}
+Publicly accessible pages satisfy the Chrome Lighthouse SEO test~\parencite{chrom_lighthouse}.
+The homepage is as exception because it requires description to be added by manually editing the Home component.
