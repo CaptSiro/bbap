@@ -1,4 +1,8 @@
-\subsection{Testing section: CMS Components}\label{subsec:testing-section-cms-components}
+\subsection{Testing the scenarios}\label{subsec:testing-the-scenarios}
+This section outlines the results of implementing the scenarios.
+The framework testing areas include CMS features, AI-Generation of content, and several development metrics.
+
+\subsubsection{CMS Components}\label{subsubsec:cms-components}
 The system is based on a role-based access control model, which enables the administrators to create users
 and assign them to groups.
 Users inherit privileges from the groups they are part of.
@@ -10,7 +14,7 @@ without assigning the Admin group the user cannot log in to administration dashb
 
 The system lacks proper descriptions for these special groups, and requires implicit understanding of the special groups.
 
-\subsection{Testing section: AI Generation}\label{subsec:testing-section-ai-generation}
+\subsubsection{AI Generation}\label{subsubsec:ai-generation}
 The framework provides couple of ways to generate content more efficiently by using AI\@.
 The following table describes whether the feature was used and following paragraphs describe the quality of generated content.
 
@@ -59,7 +63,7 @@ The following table describes whether the feature was used and following paragra
     \label{tab:evaluation-test-ai-overview}
 \end{table}
 
-\subsubsection*{Page Structure Generation}
+\paragraph{Page Structure Generation}
 The generated structures are usable but a few pages need to be removed for each project.
 For example, sometimes the Home page needs to be removed because it is implemented via the Home component.
 A few times the AI generated the whole structure with Home being the parent.
@@ -68,18 +72,18 @@ has to be deleted and regenerated.
 
 In the content-driven scenario, the generated structure was ready to use and only blog articles had to be filled in manually.
 
-\subsubsection*{Article Generation}
+\paragraph{Article Generation}
 The generated output matched the desired content but the Markdown formatting had to be manually adjusted.
 This is due to the use of a custom-made Markdown compiler, where some AI-Generated formatting choices
 lead to undefined results.
 
-\subsubsection*{Static Page Generation}
+\paragraph{Static Page Generation}
 The static contact pages are generated using AI with simple prompt without styling guides
 and detailed description of each scenario.
 Combined with the use of a smaller model, this led to lower-quality results with mismatched theme styling
 and incorrect typography.
 
-\subsubsection*{Page Component Generation}
+\paragraph{Page Component Generation}
 The page content generation is used to generate static table for corporate scenario.
 With detailed prompt the output is visually presentable but not directly usable in production.
 The issue is that generated components cannot expose editable properties or content to the editor.
@@ -88,13 +92,7 @@ If the user wants to edit the content, the change must be explicitly stated in t
 This makes the feature well-suited for drafting components in natural language and handing the output to development team
 to implement fully functional component.
 
-\subsubsection*{Documentation Generation}
-
-The framework employs on-demand documentation generation, which shifts the responsibility of correctness validation from the system to the project maintainer.
-
-This design introduces a trade-off between accessibility of undocumented code and reliability of the generated documentation.
-
-\subsubsection*{Documentation Generation}
+\paragraph{Documentation Generation}
 The Ai-Generated documentation outlines source files and lists methods of defined within each file.
 The introduction is concise, the same applies to the method descriptions.
 Due to the probabilistic nature of LLMs, the generated output varies in correctness, which is problematic in fact-driven environment,
@@ -108,7 +106,7 @@ which may expose users to incorrect and visually broken technical documentation.
 
 This design decision introduces a trade-off between accessibility and reliability of the documentation.
 
-\subsection{Testing section: Metrics Evaluation}\label{subsec:testing-section:-metrics-evaluation}
+\subsubsection{Metrics Evaluation}\label{subsubsec:metrics-evaluation}
 The framework is tested on the metrics defined in the table.
 The evaluation focuses on development effort, responsiveness, and SEO\@.
 If critical bug is encountered during the deployment, the development of fixing the bug is not counted to the metrics.
@@ -166,7 +164,7 @@ rather than by scenario-specific implementation details.
     \label{tab:evaluation-metrics-overview}
 \end{table}
 
-\subsubsection*{Requirement Coverage}
+\paragraph{Requirement Coverage}
 In corporate and content-driven scenarios, all scenario-specific are implemented by the framework.
 The only manual implemented part is custom homepage for each scenario, which is expected in framework deployment workflow
 
@@ -183,7 +181,7 @@ As a result, the requirement coverage for the personal scenario is estimated at 
 The scenario consists of two major parts: extension-specific features and CMS-based features for advertisement and documentation.
 The framework offers tools tailored only to the CMS-related functionality, while extension-specific part needs to be implemented manually.
 
-\subsubsection*{Manual Interventions}
+\paragraph{Manual Interventions}
 All scenarios must implement custom homepage which counts as one manual intervention.
 The personal scenario also includes extension-specific features:
 
@@ -195,18 +193,18 @@ The personal scenario also includes extension-specific features:
     \item Extension metadata
 \end{itemize}
 
-\subsubsection*{Time to Publishable Draft}
+\paragraph{Time to Publishable Draft}
 Measured from the initial commit to the final commit related to deployment.
 Time spent bug fixing and updating the framework are excluded from the measurement.
 For the personal scenario the initial commit already includes most of the implementation due to incorrect project setup.
 This means, that time measurement metric can be estimated but not calculated.
 
-\subsubsection*{Responsiveness}
+\paragraph{Responsiveness}
 All publicly accessible pages are responsive across tested device sizes.
 Although, some elements are implemented functionally but not optimized for usability.
 The administration dashboard interface require custom implementation of core user controls, and it is currently optimized
 for desktop devices and standard landscape resolutions.
 
-\subsubsection*{Basic SEO Readiness}
+\paragraph{Basic SEO Readiness}
 Publicly accessible pages satisfy the Chrome Lighthouse SEO test~\parencite{chrom_lighthouse}.
 The homepage is as exception because it requires description to be added by manually editing the Home component.

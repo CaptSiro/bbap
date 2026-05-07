@@ -1,0 +1,99 @@
+\subsection{Implementation Specifics of Scenarios}\label{subsec:implementation-specifics-of-scenarios}
+This section describes scenario-specific implementation details built on top of the framework.
+
+\subsubsection{Corporate}
+The goal is to implement website for a software agency, that advertise their services, projects, and blog articles
+using the CMS features.
+
+The Home directory provided by the framework does not include JavaScript file,
+but the project homepage requires extra JavaScript functionality and thus home.js is created
+and the functionality is implemented.
+The template is edited to import the script file using SideLoader's Javascript::import() method and the homepage layout
+is designed and implemented.
+
+The framework currently does not support e-commerce features, which limits the usefulness in corporate environment.
+However, simple corporate requirements can be met with initial installment of the framework.
+
+\subsubsection{Content-Driven}
+The goal is to implement website for the administrators to share a curated repository of recipes and cooking tips
+using the articles and role-based privilege systems.
+
+The homepage needs to be updated to render last edited articles and list category pages.
+The framework includes all the core functionalities needed to implement the behavior.
+The following functions are implemented for the Home component to be accessible in the template.
+
+\begin{verbatim}
+    public function getCategoryPage(): ?Page {
+        // Get from admin settings category parent page id
+        $pageId = Setting::fromName(
+            'savora:homepage-categories-page-id',
+            true,
+            1,
+            [PROPERTY_EDITABLE => true]
+        )->toInt();
+
+        return Page::fromId($pageId);
+    }
+
+    public function getFeaturedPages(): array {
+        // Get from admin settings how many articles to show
+        $limit = Setting::fromName(
+            'savora:homepage-featured-pages-count',
+            true,
+            3,
+            [PROPERTY_EDITABLE => true]
+        )->toInt();
+
+        return Page::lastUpdated(limit: $limit);
+    }
+\end{verbatim}
+
+With all needed backend features completed the template can be edited with custom homepage design.
+
+In the administration dashboard, the user group Editor is created and privileges for content management are granted.
+The group contains only one test user with the tag \("fizz"\),
+which is a system-wide unique identifier used for authentication, and password \("fizzbuzz"\).
+
+The framework currently supports only closed systems, in which the administrators create users who can manage the content.
+This decision introduces a trade-off: it simplifies the implementation of content-driven systems, but reduces flexibility.
+
+\subsubsection{Personal}
+The goal is to create a Chrome extension which shows static image as background and displays widgets editable with built-in editor.
+To achieve this goal, the core of the extension is interactive webpage.
+This enables live updates for the extension using HTML iframe element to load it, and up-to-date demonstration.
+This architectural design introduces a trade-off: the extension requires a stable internet connection because the interface is remotely hosted.
+However, after loading the interface, all content is generated from configuration stored directly in the user's browser.
+
+The extension content page is part of the Action and View framework's systems, which enable direct bind to URL path.
+
+\begin{verbatim}
+    // index.php
+    // Frame is the extension content page
+    // Bound to protocol://domain/extension
+    $router->use('/extension', new Frame());
+\end{verbatim}
+
+The page can be added to pages in administration as external page using fully qualified URL\@.
+
+The freeform widget editor needs to be implemented by hand.
+Support for custom editor is currently limited, still the framework provides general tools.
+This includes asset loading, general JavaScript utilities, forms, inspector controls from webpage content widget editor.
+
+The scenario implements serving images from selected server directories as extra feature.
+To complete the feature web settings in administration settings are used and custom endpoint with following workflow:
+
+\begin{enumerate}
+    \item Get background defined in web settings
+    \item Compute file difference in defined directories from last request
+    \item Update internal files listing if any of the directories have been updated
+    \item Select random image from internal files listing
+    \item Send URL to access the selected image
+\end{enumerate}
+
+On extension startup, the endpoint is called and if URL to image is returned it is used as background image.
+To manage directories the administrator must navigate to System \(>\) Settings and edit
+the \("\)startuh:background\_directory\_os\_hash\("\) setting.
+Multiple directories are supported by using the \(;\) directory delimiter.
+
+The personal scenario demonstrates that the framework can be extended beyond traditional CMS-based applications.
+Although interactive elements require manual implementation.
