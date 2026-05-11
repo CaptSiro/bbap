@@ -5,7 +5,7 @@ This section is going to address several common changes, that can be applied to 
 All pages created through administration dashboard include textarea to fill in meta description.
 The homepage component is defined in src/components/Home/Home.php.
 In the constructor the HtmlHead is created, and it includes function to add meta fields.
-Adding description editable through web settings can be added this way:
+Meta description, editable through web settings, can be added this way:
 
 \begin{verbatim}
     parent::__construct(
@@ -46,16 +46,15 @@ The changes should take place instantaneously.
 Files can be uploaded via the administration dashboard.
 The files are limited to pages created in dashboard and can not be used natively in homepage template.
 Navigate to the Admin/File System/Files page and drag-and-drop your files on to the grid.
-Drag-and-dropping is the only way to upload files to the system.
+Drag-and-dropping is currently the only way to upload files to the system.
 
 \subsubsection*{Changing Homepage Image}
 Add images to the public/images directory, locate the src/components/Home/Home.phtml template, and create or edit the
 desired HTML image element.
-The images are accessible on url: <project-domain>/public/images/<image-file>
+The images are accessible on url: \(<\)project-domain\(>\)/public/images/\(<\)image-file\(>\)
 
 \subsubsection*{Creating Editor User}
 Navigate to the System/Groups and create new group called Editors and fill out the privileges mapping.
-Each checkbox corresponds to Resource and Action performed on the resource.
 If the checkbox is checked it means that the group has privilege to perform the action on the resource.
 
 Navigate to the System/Users and create new user.

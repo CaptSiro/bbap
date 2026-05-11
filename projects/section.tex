@@ -1,4 +1,4 @@
-\section{Using the Prototype To Create Websites}\label{sec:creation-process-of-websites}
+\section{Framework Usage}\label{sec:framework-usage}
 This section focuses on explaining the process of setting up the prototype framework, RouteChasm~\parencite{github_routechasm}, and using it to create
 three websites of varying types:
 
@@ -8,13 +8,13 @@ three websites of varying types:
     \item Content-driven - Administrator curated repository of recipes and cooking related articles~\parencite{github_savora}
 \end{itemize}
 
-The websites are testing the following framework parts:
-
-\begin{itemize}
-    \item CMS components
-    \item AI generation (Page Structure Generation, Article Generation, Static Page Generation, Page Component Generation, Documentation Generation)
-    \item Development metrics (Requirement Coverage, Number of Manual Edits, Time to Publish, Responsiveness, and Basic SEO)
-\end{itemize}
+%The websites are testing the following framework parts:
+%
+%\begin{itemize}
+%    \item CMS components
+%    \item AI generation (Page Structure Generation, Article Generation, Static Page Generation, Page Component Generation, Documentation Generation)
+%    \item Development metrics (Requirement Coverage, Number of Manual Edits, Time to Publish, Responsiveness, and Basic SEO)
+%\end{itemize}
 
 \subsection{Technical Environment}\label{subsec:technical-environment}
 The recommended way to host the application locally is by installing Wampserver~\parencite{wampserver}.
@@ -27,8 +27,8 @@ in php.ini file.
 This will enable the server side AI generation requests.
 
 \subsection{Initial setup}\label{subsec:initial-setup}
-For each website the following shell code was executed to create project directory, download the latest version of
-the framework, and change the remote origin (GitHub repository).
+For each website the following shell code is executed to create project directory.
+The code downloads the latest version of the framework and changes the remote origin to different GitHub repository.
 
 \begin{verbatim}
     # Download the framework
@@ -48,8 +48,8 @@ the framework, and change the remote origin (GitHub repository).
     git push -u origin main
 \end{verbatim}
 
-Before the project is ready for local testing a few configuration files needs to be updated.
-The .htaccess file routes all the requests to a singular file and the framework takes care of the individual request resolution.
+Before the project is ready for local testing, a few configuration files needs to be updated.
+The .htaccess file routes all the requests to a singular file and the framework takes care of the individual requests.
 By default, this file routes the requests to the file route-chasm/index.php but the real location of the index.php file
 depends on where the project is located in relation to the web server's root directory.
 Most of the time, the web server's root directory is the parent directory of the project.
@@ -90,7 +90,7 @@ The following .env template contains all the fields used by the framework with s
 \end{verbatim}
 
 Login to the database manager (PHPMyAdmin recommended and preinstalled in Wampserver) and create new database.
-Locate the src/core/sql/init.sql file and run it in the database.
+Locate the src/core/sql/001-init.sql file and run it in the database.
 This will create empty RouteChasm database.
 To load in the database with data run the src/core/sql/export.sql file.
 Each project includes its own export.sql file.

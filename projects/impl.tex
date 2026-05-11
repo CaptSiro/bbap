@@ -5,8 +5,8 @@ This section describes scenario-specific implementation details built on top of 
 The goal is to implement website for a software agency, that advertise their services, projects, and blog articles
 using the CMS features.
 
-The Home directory provided by the framework does not include JavaScript file,
-but the project homepage requires extra JavaScript functionality and thus home.js is created
+The Home component directory provided by the framework does not include JavaScript file,
+but the design of the project's homepage requires extra JavaScript functionality and thus home.js is created
 and the functionality is implemented.
 The template is edited to import the script file using SideLoader's Javascript::import() method and the homepage layout
 is designed and implemented.
@@ -64,7 +64,7 @@ This enables live updates for the extension using HTML iframe element to load it
 This architectural design introduces a trade-off: the extension requires a stable internet connection because the interface is remotely hosted.
 However, after loading the interface, all content is generated from configuration stored directly in the user's browser.
 
-The extension content page is part of the Action and View framework's systems, which enable direct bind to URL path.
+The extension content page is part of the Action and View framework's systems, which enables direct binding to URL path.
 
 \begin{verbatim}
     // index.php
@@ -77,23 +77,23 @@ The page can be added to pages in administration as external page using fully qu
 
 The freeform widget editor needs to be implemented by hand.
 Support for custom editor is currently limited, still the framework provides general tools.
-This includes asset loading, general JavaScript utilities, forms, inspector controls from webpage content widget editor.
+This includes, but it is not limited to:
+asset loading, general JavaScript utilities, forms, and inspector controls from webpage content widget editor.
 
-The scenario implements serving images from selected server directories as extra feature.
-To complete the feature web settings in administration settings are used and custom endpoint with following workflow:
+The scenario implements serving images from selected server directories as an extra feature.
+To complete it, the web settings in administration dashboard are used and custom endpoint with following workflow is implemented:
 
 \begin{enumerate}
-    \item Get background defined in web settings
+    \item Get background paths defined in web settings
     \item Compute file difference in defined directories from last request
     \item Update internal files listing if any of the directories have been updated
     \item Select random image from internal files listing
-    \item Send URL to access the selected image
+    \item Send access URL to the selected image
 \end{enumerate}
 
-On extension startup, the endpoint is called and if URL to image is returned it is used as background image.
-To manage directories the administrator must navigate to System \(>\) Settings and edit
-the \("\)startuh:background\_directory\_os\_hash\("\) setting.
-Multiple directories are supported by using the \(;\) directory delimiter.
+On extension startup, the endpoint is called and if URL is returned, the image is used as a background image.
+To manage directories, the administrator must edit the appropriate web setting.
+Multiple directories are supported by using the \(;\) (semicolon) directory delimiter.
 
 The personal scenario demonstrates that the framework can be extended beyond traditional CMS-based applications.
 Although interactive elements require manual implementation.
