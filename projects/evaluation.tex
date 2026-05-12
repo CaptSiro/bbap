@@ -3,6 +3,7 @@ This section outlines the results of implementing the scenarios.
 The framework testing areas include CMS features, AI-Generation of content, and several development metrics.
 
 \subsubsection{CMS Components}\label{subsubsec:cms-components}
+\paragraph{Special Roles}
 The system is based on a role-based access control model, which enables the administrators to create users
 and assign them to groups.
 Users inherit privileges from the groups they are part of.
@@ -13,6 +14,37 @@ that grants the Page editing privilege,
 without assigning the Admin group the user cannot log in to administration dashboard.
 
 The system lacks proper descriptions for these special groups, and requires implicit understanding of the special groups.
+
+\paragraph{File System Usability Concerns}
+File management in the administration dashboard is functional but usability is suboptimal.
+Currently, file upload is limited to drag-and-drop interaction within a designated area, which is hidden until
+the user drags files over it.
+This approach works for devices with a mouse pointer, but it might not function properly for devices with touch input methods.
+The latter case was not tested, because touchscreen computer-like device was not available during development and testing.
+
+Currently, uploaded files display file type icon, filename with extension, and size.
+As a result, this makes it difficult to find files that are recognisable by their content.
+For example, images are generally easier to identify via previews, which is not the case for current file listing.
+
+To summarize, the File System implements basic functionality to upload file, create directory,
+delete File System file or directory, and select file from listing, but requires implicit knowledge of the system,
+assumes the use of specific device, and expects the user to remember files by name.
+
+\paragraph{Missing Navigation Controls}
+When navigating the administration dashboard the user must either use the menu on the left or rely on browser history navigation.
+The menu includes initial pages sorted into categories and browser history provides linear navigation.
+As a result, navigating within the page context may be suboptimal.
+For example, currently, there is no direct navigation option to access parent page from property editor,
+used to manage page template, status, and SEO\@.
+The editor's title displays parent's title instead of the page's title that is being edited, which may confuse the users
+if multiple property editors are opened from the same page parent.
+
+\paragraph{Missing Progress Updates}
+When an action that may take over a few seconds is performed, the system displays static modal window with the action title
+and prevents the user from interacting with the website.
+For example, when a file is being uploaded, the progress bar should be implemented to enable the user to infer
+estimated upload time, or when multi-stage AI generation is performed, the system should display expected stages
+and indicate when stage is completed with the completion status.
 
 \subsubsection{AI Generation}\label{subsubsec:ai-generation}
 The framework provides couple of ways to generate content more efficiently by using AI\@.

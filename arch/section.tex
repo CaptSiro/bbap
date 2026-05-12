@@ -37,8 +37,13 @@ Multiple trade-offs were encountered while implementing every component:
     \item Automation vs.\ Control
 \end{itemize}
 
-In practice, the implementation favors simplicity, abstraction, and control for the development efficiency.
+In practice, the implementation favors simplicity over flexibility, abstraction over performance, and control over automation.
 This architectural decision limits the architectural flexibility in certain areas.
+
+For example, the prototype currently supports only the OpenAI client to reduce complexity.
+Similarly, it uses a custom HTTP route compiler to provide higher abstraction.
+Finally, the database schema is initialized through SQL scripts rather than initializing it from model descriptions
+for finer-grained control.
 
 \subsection{Summary}\label{subsec:architecture-summary}
 The system architecture exposes the complexity hidden behind the high-level design.

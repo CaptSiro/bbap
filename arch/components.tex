@@ -62,7 +62,8 @@ Working with JPA~\parencite{oracle_javaee6_tutorial} inspired to annotate the co
 The database layer implements an ORM built from ground up to fit the system needs.
 Several existing ORMs~\parencite{cycle_orm,doctrine_orm} were evaluated but their abstractions
 do not align the architectural model of the system.
-Furthermore, many of the features were deemed unnecessary and the removal of these features clarifies the programming interface.
+Furthermore, many of the features were deemed unnecessary and the removal of these features simplifies the programming interface.
+The trade-offs of implementing custom ORM to Cycle ORM~\parencite{cycle_orm} is described after the custom ORM is architecture is defined.
 The system's ORM is built to fulfill the needs of the system while not adding extra features.
 To enable the ORM to fit into the architecture some areas had to be written in unconventional style:
 
@@ -124,12 +125,14 @@ Not defining projection for SelectQuery is not encouraged.
     // Returns record with the id 4
     // populating all column properties on the User object
     // SELECT id_user, name FROM ...
-    User::first(where: Query::infer('id_user = ?', 4));
+    $user = User::first(where: Query::infer('id_user = ?', 4));
+    // Shorthand version is defined for fetching models by ids
+    $user = User::fromId(4);
 
     // Returns record with the id 4
     // populating only columns defined in projection array
     // SELECT name FROM ...
-    User::first(
+    $user = User::first(
         projection: ['name'],
         where: Query::infer('id_user = ?', 4)
     );
@@ -141,7 +144,58 @@ Not defining projection for SelectQuery is not encouraged.
         ->where(Query::infer('id_user = ?', 4));
 \end{verbatim}
 
-Defining custom ORM database interface provides control how the features are implemented and integrated into the system.
+Defining custom ORM database interface provides control over how the features are implemented and integrated into the system.
+For example, the following statements are optimized for physical character count and expressiveness than their counterpart
+in Cycle ORM~\parencite{cycle_orm_crd}.
+
+\begin{verbatim}
+    // Each case shows implementation in
+    // Custom ORM and Cycle ORM separated by new line
+    // 1. Fetch User with given id
+    $user = User::fromId(4);
+
+    $user = $orm->getRepository(User::class)
+        ->findByPK(4);
+
+    // 2. Update name for the user
+    $user->name = "Timmy";
+
+    $user->setName("Timmy");
+
+    // 3.1. Save user record to database
+    $result = $user->save();
+
+    $manager = new \Cycle\ORM\EntityManager($orm);
+    $manager->persist($user);
+    $manager->run();
+
+    // 3.2. Delete user record from database
+    $result = $user->delete();
+
+    $manager = new \Cycle\ORM\EntityManager($orm);
+    $manager->delete($user);
+    $manager->run();
+
+    // Fetching collection of users
+    $all = User::all();
+    $some = User::all(
+        where: Query::infer('name = ?', "Timmy")
+    );
+
+    $all = $orm->getRepository(User::class)->findAll();
+    $some = $orm->getRepository(User::class)->findAll(
+        ["name" => "Timmy"]
+    );
+\end{verbatim}
+
+The custom ORM provides one-line statements for common tasks without relying on an external ORM instance such as \(\$orm\).
+This enables simpler usage but sacrifices creation of multiple environments, for example, production and testing environments.
+Another trade-off is saving a model with related models to database.
+If the user example included Address model, both models would have to be created, updated, and saved separately,
+but Cycle ORM handles persisting all related entities in one entity manager operation~\parencite[Persisting Related Entities]{cycle_orm_crd}.
+
+The Custom ORM implementation is in prototype stage and thus some functionalities are not implemented.
+For example, transactions, relation mapping, automatic schema inference are currently not supported in the Custom ORM architecture.
 
 
 
