@@ -2,6 +2,8 @@
 This section outlines the results of implementing the scenarios.
 The framework testing areas include CMS features, AI-Generation of content, and several development metrics.
 
+
+
 \subsubsection{CMS Components}\label{subsubsec:cms-components}
 \paragraph{Special Roles}
 The system is based on a role-based access control model, which enables the administrators to create users
@@ -45,6 +47,8 @@ and prevents the user from interacting with the website.
 For example, when a file is being uploaded, the progress bar should be implemented to enable the user to infer
 estimated upload time, or when multi-stage AI generation is performed, the system should display expected stages
 and indicate when stage is completed with the completion status.
+
+
 
 \subsubsection{AI Generation}\label{subsubsec:ai-generation}
 The framework provides couple of ways to generate content more efficiently by using AI\@.
@@ -138,6 +142,8 @@ which may expose users to incorrect and visually broken technical documentation.
 
 This design decision introduces a trade-off between accessibility and reliability of the documentation.
 
+
+
 \subsubsection{Metrics Evaluation}\label{subsubsec:metrics-evaluation}
 The framework is tested on the metrics defined in the table.
 The evaluation focuses on development effort, responsiveness, and SEO\@.
@@ -156,9 +162,9 @@ rather than by scenario-specific implementation details.
         \\
         \hline
         Requirement Coverage
-        & 100\%
-        & 100\%
-        & 50\%
+        & 5 out of 6
+        & 8 out of 11
+        & 6 out of 10
         \\
         \hline
         Manual Interventions
@@ -197,17 +203,8 @@ rather than by scenario-specific implementation details.
 \end{table}
 
 \paragraph{Requirement Coverage}
-In corporate and content-driven scenarios, all scenario-specific features are already implemented by the framework.
-The only manually implemented part is custom homepage for each scenario, which is expected in the framework deployment workflow
-
-In the personal scenario, all CMS features are implemented by the framework but extension-specific features
-must be implemented manually.
-This includes custom HTTP endpoints, a custom extension component with freeform widget editor different
-from webpage widget component editor, static images, extension metadata, and custom homepage.
-
-As a result, the requirement coverage for the personal scenario is estimated at approximately 50\%.
-The scenario consists of two major parts: extension-specific features and CMS-based features for advertisement and documentation.
-The framework offers tools tailored only to the CMS-related functionality, while extension-specific parts needs to be implemented manually.
+Each scenario defines requirements for the framework and the requirement coverage tracks how many of the requirements
+are currently implemented in the framework.
 
 \paragraph{Manual Interventions}
 All scenarios must implement custom homepage which counts as one manual intervention.
@@ -236,3 +233,122 @@ for desktop devices and standard landscape resolutions.
 \paragraph{Basic SEO}
 Publicly accessible pages satisfy the Chrome Lighthouse SEO test~\parencite{chrom_lighthouse}.
 The homepage is an exception because it requires meta description to be added manually by editing the Home component.
+
+
+
+\subsubsection{Usability Evaluation}
+This section explains what method is used to evaluate framework's usability.
+A small-scale usability study is performed on five participants who finished the whole study.
+
+The participants are asked to pick one of the outlined scenario and try to reimplement it, the respondent's choice is not tracked.
+After finishing the scenario, all the respondents fill out the System Usability Scale proposed by John Brooke in 1986.
+The standard version of SUS contains five positively worded and five negatively worded questions.
+The answer is represented by five-point scale from one (\("\)Strongly Disagree\("\)) to five (\("\)Strongly Agree\("\)).
+To evaluate the total SUS score per respondent the following formula was used~\parencite{lewis_sus}.
+
+\[
+    \mathrm{SUS} =
+        2.5 \times
+        \left(
+            \sum_{i \in P}(x_i - 1)
+            +
+            \sum_{i \in N}(5 - x_i)
+        \right)
+\]
+
+where \(P\) represents responses to positively worded questions and \(N\) represents responses to negatively worded questions.
+
+The calculated SUS scores are shown in Table~\ref{tab:sus-results}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Participant & SUS Score \\
+        \hline
+        1 & 85 \\
+        2 & 85 \\
+        3 & 60 \\
+        \hline
+        Average & 76.67 \\
+        \hline
+    \end{tabular}
+    \caption{Results of the System Usability Scale evaluation}
+    \label{tab:sus-results}
+\end{table}
+
+The mean SUS score of the prototype usability study is 76.67, marked by red dot on scales~\ref{fig:sus-scales}.
+The calculated mean SUS score is converted into grade scale and acceptance levels by thresholds
+and mean scores above 70 are considered as acceptable~\parencite{setemen_sus}.
+
+\begin{figure}[h]
+    \centering
+
+    \begin{tikzpicture}
+        \node[anchor=west] at (0,1.2) {Grade Scale};
+
+        \draw[thick] (0,0) -- (10,0);
+
+        \foreach \x/\l in {
+            0/0,
+            6/60,
+            7/70,
+            8/80,
+            9/90,
+            10/100}
+            {
+            \draw (\x,0.15) -- (\x,-0.15);
+            \node[below] at (\x,-0.15) {\l};
+        }
+
+        \node at (3,-0.6) {F};
+        \node at (6.5,-0.6) {D};
+        \node at (7.5,-0.6) {C};
+        \node at (8.5,-0.6) {B};
+        \node at (9.5,-0.6) {A};
+
+        \node[anchor=west] at (0,-2) {Acceptance Levels};
+
+        \draw[thick] (0,-3) -- (10,-3);
+
+        \foreach \x/\l in {
+            0/0,
+            5/50,
+            7/70,
+            10/100}
+            {
+            \draw (\x,-2.85) -- (\x,-3.15);
+            \node[below] at (\x,-3.15) {\l};
+        }
+
+        \node at (2.5,-3.6) {Not Accepted};
+        \node at (6,-3.6) {Marginal};
+        \node at (8.5,-3.6) {Accepted};
+
+        \filldraw[red] (7.667,0) circle (2pt);
+        \node[text=red] at (7.667,0.4) {Mean};
+
+        \filldraw[red] (7.667,-3) circle (2pt);
+        \node[text=red] at (7.667,-2.6) {Mean};
+    \end{tikzpicture}
+    \caption{Interpretation scales for SUS scores}
+    \label{fig:sus-scales}
+\end{figure}
+
+Two participants rated the system positively reaching the SUS score of 85, which indicates that the framework was easy
+to learn or the framework used user interfaces similar to other applications, such that the user could harness the knowledge.
+Although, one participant evaluated the framework with a lower score of 60.
+This result suggests that certain groups of users may struggle with onboarding and navigating the system.
+The individual scores indicates that usability of the system may depend on technical background and expectations of the user.
+This observation is relevant because the target audience for the framework consists primarily
+of users with technical backgrounds and developers,
+and the framework's user interface assumes shared technical knowledge between these two groups.
+
+The usability evaluation has several limitations, that is sample size, selected user group, actions performed, and time spent with the framework.
+The number of participants is very small, which reduces the statistical meaning of the results.
+The participants are not selected from a broad user population.
+The study asks the participants to recreate a scenario which includes development tasks as well as administrative tasks.
+This decision limits users who are available to perform the study and evaluate the framework.
+The respondents are asked to evaluate their initial interaction with the framework rather than long-term usage.
+
+Future work should include larger sample size, splitting the tasks, and feedback questions to identify the problematic areas of the framework.

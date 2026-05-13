@@ -5,6 +5,17 @@ This section describes scenario-specific implementation details built on top of 
 The goal is to implement website for a software agency, that advertise their services, projects, and blog articles
 using the CMS features.
 
+Based on the goal, the following scenario-specific requirements are identified.
+
+\begin{enumerate}
+    \item Creation of websites presenting company services, projects, and blog articles using built-in CMS\@.
+    \item Creation of a custom-made homepage.
+    \item Integration of custom JavaScript files into existing components.
+    \item Modification of existing component templates without requiring changes to the framework core code.
+    \item Deployment of a basic corporate website through initial installation of the framework.
+    \item Support for e-commerce functionality (not implemented).
+\end{enumerate}
+
 The Home component directory provided by the framework does not include JavaScript file,
 but the design of the project's homepage requires extra JavaScript functionality and thus home.js is created
 and the functionality is implemented.
@@ -17,6 +28,22 @@ However, simple corporate requirements can be met with initial installment of th
 \subsubsection{Content-Driven}
 The goal is to implement website for the administrators to share a curated repository of recipes and cooking tips
 using the articles and role-based privilege systems.
+
+Based on the goal, the following scenario-specific requirements are identified.
+
+\begin{enumerate}
+    \item Support article management functionality, including creation, editing, deletion, and listing of articles.
+    \item Allow the homepage to dynamically display the most recently updated articles.
+    \item Configuration of homepage content, such as setting the number of featured articles listed.
+    \item Support role-based access control for content management.
+    \item Creation of user groups with defined privileges (e.g., Editor role).
+    \item Support assignment of users to defined groups.
+    \item Provide a system for storing configuration values editable by administrators.
+    \item Support multi-author collaboration workflows (e.g., draft, review, publish states).
+    \item Support logging of content modifications (not implemented).
+    \item Provide categorizing articles and retrieving articles by category (not implemented).
+    \item Support public content publishing (not implemented due to closed system design).
+\end{enumerate}
 
 The homepage needs to be updated to render last edited articles and list category pages.
 The framework includes all the core functionalities needed to implement the behavior.
@@ -59,6 +86,22 @@ This decision introduces a trade-off: it simplifies the implementation of conten
 
 \subsubsection{Personal}
 The goal is to create a Chrome extension which shows static image as background and displays widgets editable with built-in editor.
+
+Based on the goal, the following scenario-specific requirements are identified.
+
+\begin{enumerate}
+    \item Binding of web pages to specific (external) URLs.
+    \item Provide utilities for loading static assets (e.g., images, scripts) to client.
+    \item Provide a system for storing configuration values editable by administrators.
+    \item Integration for custom backend endpoints.
+    \item Provide basic JavaScript utilities for building custom frontend behaviors.
+    \item Support extending the frontend through custom JavaScript files without modifying core framework code.
+    \item Provide a built-in visual widget editor capable of creating general UIs not limited to article style pages (not implemented).
+    \item Provide built-in caching for external resources to reduce online dependency (not implemented).
+    \item Provide abstraction for browser-extension specific integration (not implemented).
+    \item Support automatic detection and synchronization of native file system and framework's file system (not implemented).
+\end{enumerate}
+
 To achieve this goal, the core of the extension is interactive webpage.
 This enables live updates for the extension using HTML iframe element to load it, and up-to-date demonstration.
 This architectural design introduces a trade-off: the extension requires a stable internet connection because the interface is remotely hosted.
