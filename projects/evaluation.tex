@@ -269,15 +269,17 @@ The calculated SUS scores are shown in Table~\ref{tab:sus-results}.
         1 & 85 \\
         2 & 85 \\
         3 & 60 \\
+        4 & 42.5 \\
+        5 & 77.5 \\
         \hline
-        Average & 76.67 \\
+        Average & 70 \\
         \hline
     \end{tabular}
     \caption{Results of the System Usability Scale evaluation}
     \label{tab:sus-results}
 \end{table}
 
-The mean SUS score of the prototype usability study is 76.67, marked by red dot on scales~\ref{fig:sus-scales}.
+The mean SUS score of the prototype usability study is 70, marked by red dot on scales~\ref{fig:sus-scales}.
 The calculated mean SUS score is converted into grade scale and acceptance levels by thresholds
 and mean scores above 70 are considered as acceptable~\parencite{setemen_sus}.
 
@@ -325,24 +327,28 @@ and mean scores above 70 are considered as acceptable~\parencite{setemen_sus}.
         \node at (6,-3.6) {Marginal};
         \node at (8.5,-3.6) {Accepted};
 
-        \filldraw[red] (7.667,0) circle (2pt);
-        \node[text=red] at (7.667,0.4) {Mean};
+        \filldraw[red] (7,0) circle (2pt);
+        \node[text=red] at (7,0.4) {Mean};
 
-        \filldraw[red] (7.667,-3) circle (2pt);
-        \node[text=red] at (7.667,-2.6) {Mean};
+        \filldraw[red] (7,-3) circle (2pt);
+        \node[text=red] at (7,-2.6) {Mean};
     \end{tikzpicture}
     \caption{Interpretation scales for SUS scores}
     \label{fig:sus-scales}
 \end{figure}
 
-Two participants rated the system positively reaching the SUS score of 85, which indicates that the framework was easy
+Three participants rated the system positively reaching the SUS score over 75, which indicates that the framework was easy
 to learn or the framework used user interfaces similar to other applications, such that the user could harness the knowledge.
-Although, one participant evaluated the framework with a lower score of 60.
+One participant evaluated the framework with a score of 60, which indicates some friction while using the system.
+However, one participant rated the system's usability negatively, reaching below the threshold of 50,
+and classifying the usability as Not Acceptable.
+The overall mean score is 70, which makes it barely acceptable.
+
 This result suggests that certain groups of users may struggle with onboarding and navigating the system.
 The individual scores indicates that usability of the system may depend on technical background and expectations of the user.
 This observation is relevant because the target audience for the framework consists primarily
 of users with technical backgrounds and developers,
-and the framework's user interface assumes shared technical knowledge between these two groups.
+and the framework's user interface assumes a baseline in technical knowledge.
 
 The usability evaluation has several limitations, that is sample size, selected user group, actions performed, and time spent with the framework.
 The number of participants is very small, which reduces the statistical meaning of the results.

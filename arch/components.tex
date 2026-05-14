@@ -52,6 +52,8 @@ Examples of routes:
         and save the remainder to the "id" variable
 \end{verbatim}
 
+The routing system is deterministic, because it implements precedence sorting for route types, and satisfies FR1, FR2, and FR3.
+
 
 
 \subsubsection*{Database Layer}
@@ -85,6 +87,9 @@ Example of mapping users table to the User class:
     class User extends Model {
         #[Column('id_user', Column::TYPE_INTEGER, primaryKey: true)]
         protected int $id;
+
+        // Automatic form generation
+        #TextField('Name')
 
         #[Column('name', Column::TYPE_STRING)]
         protected string $name;
@@ -194,8 +199,11 @@ Another trade-off is saving a model with related models to database.
 If the user example included Address model, both models would have to be created, updated, and saved separately,
 but Cycle ORM handles persisting all related entities in one entity manager operation~\parencite[Persisting Related Entities]{cycle_orm_crd}.
 
-The Custom ORM implementation is in prototype stage and thus some functionalities are not implemented.
+The custom ORM implementation is in prototype stage and thus some functionalities are not implemented.
 For example, transactions, relation mapping, automatic schema inference are currently not supported in the Custom ORM architecture.
+
+The custom ORM implementation enables definition of attributes for automatic form generation and following conventions defined during development.
+This fulfills FR4, FR5, FR7, and partially satisfies FR6.
 
 
 
@@ -289,10 +297,12 @@ Example usage of the translation system:
     <button>
 \end{verbatim}
 
+The translation system includes generating translations using AI and thus satisfies the AIR1.
+
 
 
 \subsubsection*{Administration Interface}
-The administration system automates CRUD operations based on database models.
+The administration system automates CRUD operations based on database models satisfying the FR4.
 While this reduces development effort, it introduces constraints:
 
 \begin{itemize}
@@ -343,6 +353,10 @@ configuration object, that handles if logged-in user has sufficient privileges f
         $router
     );
 \end{verbatim}
+
+Certain types of pages can be edited using the component-based widget editor that uses JSON structure to store the state of used widgets
+and based on the structure generates the User Interface on client's side satisfying the FR8 and FR9.
+The editor implements AI widget capable of modifying its visuals and behavior based prompt in natural language and fulfilling the AIR2.
 
 
 
@@ -419,7 +433,7 @@ Couple of challenges were encountered early on:
 Implementation of the communication system is straightforward because most of the heavy lifting is done in systems
 that is already present in the codebase.
 
-Example of requesting website sources using OpenAi client:
+Example of requesting website sources using OpenAi client fulfilling the AIR3:
 \begin{verbatim}
     // Creates client using the API key and model defined in .env file
     $client = OpenAi::fromEnv();
@@ -451,3 +465,7 @@ Example of requesting website sources using OpenAi client:
         // Handle reponse from LLM
     }
 \end{verbatim}
+
+The communication system is used to perform AI-Generation of static webpages, widgets for component-based widget editor,
+translations, source code documentation, article content generation, and website structure generation.
+The usage of the system fulfills the AIR1, AIR2, AIR3, AIR4, and AIR5.

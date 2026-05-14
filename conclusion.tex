@@ -1,0 +1,60 @@
+\section{Conclusion}\label{sec:conclusion}
+The goal of this thesis is to design and implement a full-stack web framework focused on simplifying the development,
+supporting extensibility, and integrating AI generation features.
+One of the sub goals is to implement the framework with minimal usage of third party code.
+Currently, the prototype does not rely on external libraries or other frameworks, it uses internally developed libraries
+and standardized PHP extensions such as curl, PDO, fileinfo, gd, and mbstring.
+This fulfills the NFR4.
+
+\subsection{Hypothesis Evaluation}\label{subsec:hypothesis-evaluation}
+The observations during implementation and evaluation results generally support the hypotheses proposed in Chapter~\ref{subsec:introduction-hypothesis}.
+
+The scenarios demonstrated that unified and convention-driven abstractions simplifies the deployment of applications with varying types.
+The built-in features enabled rapid deployment of smaller to medium-sized applications while supporting custom implementation if needed.
+This and evaluation results qualitatively satisfy the NFR1.
+The scenarios confirmed the usability of the tested systems and AI-Generated content.
+The System Usability Scale evaluation of the prototype produced an average of 70, which makes the implementation acceptable.
+
+Observations during implementation showed that minimizing reliance on third-party dependencies improved consistency
+and streamlined integration of subsystems across the architecture fulfilling the NFR2,
+although it increased the implementation time.
+
+The evaluation results show that AI-Generated content decreases the time spent on content creation.
+However, the evaluation confirmed the AI-Generated content requires manual verification and modification.
+
+Due to the limited scope of the implemented prototype and smaller number of participants in evaluation,
+the conclusion should be interpreted as observations rather than statistically validated results.
+
+\subsection{Requirements Evaluation}\label{subsec:requirements-evaluation}
+The implementation observations and evaluation results indicate that the framework fulfills the majority of requirements.
+
+The NFR3 requirement is perceived as partially satisfied based on qualitative evaluation.
+During implementation and evaluation actions performed by the framework did not exceed the expect time to fulfill the request,
+thus the framework is performant enough for small-to-medium sized projects.
+However, no performance benchmarking was conducted.
+
+\subsection{Limitations of the Prototype}\label{subsec:limitations-of-the-prototype}
+The thesis also identified several limitations of the current implementation.
+Currently, some advanced features expected from modern full-stack framework require manual implementation.
+These include on-demand user sign in, collaborative editing, e-commerce support, and general visual content editor.
+Additionally, the implemented architecture favors solutions maximizing for simplicity, abstraction, and control.
+For example, the closed user system simplifies administration but limits the usability in systems opened the public registrations.
+
+\subsection{AI-Generated Content}\label{subsec:ai-generated-content}
+The Ai-Generated content demonstrated usefulness for certain tasks, such as article content generation and phrase translation.
+Although, the evaluation shows that AI-Generated outputs require manual verification and modification.
+As a result, AI-Generation features should currently be considered a supporting tool for drafting purposes rather
+than automated solution generation tool.
+
+\subsection{Future Work}\label{subsec:future-work}
+Future Work should focus primarily on improving extensibility of the system, reducing manual implementations, and refactoring
+outdated systems.
+Potential improvements include replacement of component-based widget editor for general visual content editor,
+support for modules, improvement of authentication system, refactoring the structure of the repository, and adding more
+page templates such as contact page.
+Additionally, larger-scale usability evaluation with framework-specific questions to identify the weaker parts of the system.
+
+\subsection{Final Thoughts}\label{subsec:final-thoughts}
+Overall, the thesis shows that the implemented framework is usable for wide range of use cases and enables rapid deployment
+of simple projects.
+Although, the framework currently contains several limitations, the implemented prototype uses solid architectural foundation for future expansions.

@@ -14,17 +14,17 @@ These requirements specify how the system implements core systems, AI tooling, a
     \item FR5: Models must map database columns to properties without extra boilerplate.
     \item FR6: The framework must provide form-handling subsystem.
     \item FR7: The system has the ability to automatically infer forms based on model structure.
-    \item FR9: The framework must provide a component-based editor capable of creating and maintaining webpages.
-    \item FR10: Editor components must be rendered on client from provided structure.
+    \item FR8: The framework must provide a component-based editor capable of creating and maintaining webpages.
+    \item FR9: Editor components must be rendered on client from provided structure.
 \end{itemize}
 
 \subsubsection{AI Generation Requirements}
 \begin{itemize}
     \item AIR1: The system must include an AI-powered translation unit capable of translating static text and text templates for supported languages.
-    \item AIR3: The framework must support generating new editor components.
-    \item AIR4: Users must be able to request AI-generated static webpages from natural language prompt.
-    \item AIR5: The system must provide AI-documentation from its own source files.
-    \item AIR6: The AI generation process must follow the project’s naming conventions and structural constraints.
+    \item AIR2: The framework must support generating new editor components.
+    \item AIR3: Users must be able to request AI-generated static webpages from natural language prompt.
+    \item AIR4: The system must provide AI-documentation from its own source files.
+    \item AIR5: The system must include website structure generation of pages and their templates.
 \end{itemize}
 
 \subsection{Non-Functional Requirements}\label{subsec:non-functional-requirements}
@@ -37,5 +37,4 @@ These requirements specify how the whole system behaves rather than addressing s
     \item NFR4: All core features must be implemented with minimal reliance on third-party libraries.
     \item NFR5: The code must follow the conventions defined by the framework’s philosophy.
     \item NFR6: The framework's systems must follow a unified design approach.
-    \item NFR8: Routing and form generation must be deterministic.
 \end{itemize}
