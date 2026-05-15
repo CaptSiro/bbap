@@ -2,14 +2,14 @@
 This section compares two widely used web platforms, WordPress and Squarespace.
 
 \subsubsection{WordPress}\label{subsubsec:wordpress}
-WordPress~\parencite{wordpress} is a widely adopted open-source content management system written in PHP and using an SQL database.
-It is extremely flexible through its plugin and theming ecosystem.
-Being open-source enables the developers to modify the core behavior if needed.
+WordPress~\parencite{wordpress} is a widely adopted open-source content management system written in PHP\@.
+It is flexible through its plugin and theming ecosystem.
+The platform is open-source, which enables the developers to modify the core behavior if needed.
 
 The primary advantages of WordPress include:
 
 \begin{itemize}
-    \item High flexibility due to open-source access.
+    \item High flexibility due to being open-source.
     \item Large ecosystem of plugins and themes.
     \item Strong community support and documentation.
 \end{itemize}
@@ -18,8 +18,8 @@ Excessive plugin usage may introduce inconsistent behavior or even produce secur
 However, this flexibility comes at the cost of architectural complexity, which is partially addressed by code comments
 and in-depth documentation.
 
-From a developer perspective, WordPress is powerful but complex architecture accumulated over the years of development~\parencite{wordpress_docs_rest}.
-If the developers are satisfied with the tooling then they are going to make amazing experience for the user.
+From a developer perspective, WordPress is powerful but suffers from complex architecture accumulated over the years
+of development~\parencite{wordpress_docs_rest}.
 
 \subsubsection{Squarespace}\label{subsubsec:squarespace}
 Squarespace~\parencite{squarespace} is a proprietary, fully hosted website builder focused on ease of use and visual design.
@@ -29,14 +29,14 @@ It may seem like closed-systems are more secure over the open-source projects .
 However, this is not necessarily the case.
 When security flaw is found in open-source system it is either fixed before it has a chance to be exploited
 or the issue is fixed before it can negatively impact large number of users.
-For example, the backdoor in xz Utils was identified through external analysis from third party developer,
+For example, the backdoor in xz Utils was identified through external analysis from third-party developer,
 whose code depends on the library~\parencite{cve_2024_3094}.
-This is the reason why the thesis proposed solution is going to be open-source.
+This is the reason why the thesis proposed solution is open-source.
 
 The main advantages of Squarespace include:
 
 \begin{itemize}
-    \item Extremely fast setup and deployment.
+    \item Fast setup and deployment.
     \item Integrated hosting and maintenance.
     \item Consistent user experience and stability.
     \item Minimal technical knowledge required.
@@ -47,14 +47,13 @@ Developers cannot access the underlying backend architecture to host the website
 core behavior.
 
 Squarespace design philosophy prioritizes end users over developers,
-which is reflected by closed-source nature.
-This makes it is great for less tech-savvy users, but lacks in flexibility for teams of developers.
+which is reflected by the closed-source nature.
+This makes it well-suited solution for less tech-savvy users, but lacks in flexibility for developers.
 
 \subsubsection{Platforms Comparison Summary}\label{subsubsec:platforms-comparison-summary}
 WordPress emphasizes openness and extensibility but suffers from architectural complexity.
 Squarespace prioritizes simplicity but lacks customization needed for developers.
-
-From user experience I find Squarespace website editor easier to use than what WordPress provides.
+From a usability perspective, the Squarespace website editor is easier to use than the one WordPress provides.
 
 Neither platform fully satisfies the requirements of a system that aims to provide:
 
@@ -66,4 +65,4 @@ Neither platform fully satisfies the requirements of a system that aims to provi
 
 The thesis solution positions itself between these two approaches:
 maintaining developer control and being open-source project similar to WordPress
-while providing easy to use interface like the one Squarespace defines.
+while providing easy to use User Interface like the one Squarespace defines.

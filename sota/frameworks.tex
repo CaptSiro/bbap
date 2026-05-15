@@ -15,16 +15,16 @@ The primary advantages of Laravel include:
     \item Active community.
 \end{itemize}
 
-Laravel implements core features, but the focus on maintaining clean programming interface it constraints the features
+Laravel implements core features, but the focus on maintaining clean programming interface constraints the features
 in depth and flexibility.
 
-For example the view implementation lacks type safety provided by using typed objects as interfaces for rendering views.
+For example the view implementation lacks type safety provided by using typed objects as interfaces for views.
 The calls to the built-in function view may be wrapped in another function and using the parameters of the function to achieve type safety.
 This gives the developer option to either work in non-type-safe environment or to add unnecessary boilerplate to the application~\parencite{laravel_view}.
 
-The routing system does not support compositional route definitions in which parent routes dynamically defines nested sub-routes.
+The routing system does not support compositional route definitions, in which the parent node dynamically defines nested sub-routes.
 This makes it difficult to encapsulate helper controller routes.
-For example, route which handles reordering of priority-based table found in page listings.
+For example, route which handles reordering of priority-based tables found in page listings.
 
 The endpoints are stateless and are not aware of what path they are bound to.
 Which means that routes need to be explicitly named to be able to programmatically retrieve them~\parencite{laravel_routing}.
@@ -41,14 +41,14 @@ These designs include:
 
 \subsubsection{Nette}\label{subsubsec:nette}
 Nette~\parencite{nette} is an open-source PHP web framework focused on security, documentation, and clean application architecture.
-The framework and documentation is tailored for developers in the Czech republic.
+The framework and documentation is tailored for developers in the Czech Republic.
 It provides a component-based structure built around the Model-View-Presenter (MVP) design pattern,
-along with systems for routing, templating, and form handling.
+along-side systems for routing, templating, and form handling.
 
 The primary advantages of Nette include:
 
 \begin{itemize}
-    \item Demographic features for market in the Czech republic
+    \item Demographic features for market in the Czech Republic
     \item Focus on security
     \item OOP approach
 \end{itemize}
@@ -56,17 +56,17 @@ The primary advantages of Nette include:
 Nette also defines system for testing code, but this approach requires to run the php source file directly from console
 and does not provide output to HTML web page or writing reports to file~\parencite{nette_testing}.
 
-File system for nette is utility class with defined functions for common operations with the native file system.
+File system for nette is a utility class with defined functions for common operations with the native file system.
 This system does not integrate extra functionality designed for web application.
 Such as file upload, download, persisting file reference in database, or file structure abstraction~\parencite{nette_filesystem}.
 
 \subsubsection{Frameworks Comparison Summary}\label{subsubsec:frameworks-comparison-summary}
 Laravel emphasizes developer productivity and ease of development through its expressive syntax.
 However, the simplicity in api results in limited depth for certain features,
-such as lack of type safety in views and routing definitions not implementing dynamic structure and context aware endpoints.
+such as lack of type safety in views and routing definitions or not implementing dynamic structure and context aware endpoints.
 
-Nette focuses on clean architecture, template security, and an object-oriented approach,
-with strong support for developers in the Czech republic.
+Nette focuses on clean architecture, security, and an object-oriented approach,
+with strong support for developers in the Czech Republic.
 However, some subsystems are limited in scope,
 functioning primarily as utility wrappers rather than full-featured systems designed for web applications.
 This includes, for example, the file system abstraction.

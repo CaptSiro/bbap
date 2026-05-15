@@ -9,7 +9,7 @@ The architecture follows a hybrid approach combining:
     \item Globally accessible Request and Response objects.
     \item Interface-driven communication between components.
     \item Developer constants are defined in respective classes serving as static key-value look-up tables.
-    \item Tooling for performing AI-Generation task are implemented as a part of the system.
+    \item Tooling, for performing AI-Generation tasks, is implemented as a part of the system.
 \end{itemize}
 
 This approach provides easily accessible datasets, that are needed in all parts of the system.
@@ -29,7 +29,7 @@ The design suggests a clean pipeline, but the actual execution model includes ad
 These factors make the system execution convoluted compared to the idealized pipeline model.
 
 \subsection{Architectural Trade-offs}\label{subsec:architectural-tradeoffs}
-Multiple trade-offs were encountered while implementing every component:
+Multiple trade-offs were encountered while implementing components:
 
 \begin{itemize}
     \item Simplicity vs.\ Flexibility
@@ -39,7 +39,6 @@ Multiple trade-offs were encountered while implementing every component:
 
 In practice, the implementation favors simplicity over flexibility, abstraction over performance, and control over automation.
 This architectural decision limits the architectural flexibility in certain areas.
-
 For example, the prototype currently supports only the OpenAI client to reduce complexity.
 Similarly, it uses a custom HTTP route compiler to provide higher abstraction.
 Finally, the database schema is initialized through SQL scripts rather than initializing it from model descriptions

@@ -4,7 +4,7 @@ Painting the whole system as a black-box implementation, the interface is known,
 
 \subsection{Design Goals}\label{subsec:design-goals}
 The primary objective of the system is to provide a flexible environment for full-stack development.
-The design emphasizes simplicity and ease of integration, allowing the components extended easily.
+The design emphasizes simplicity and ease of integration, allowing the components to be extended easily.
 
 The key design goals are:
 \begin{itemize}
@@ -34,7 +34,7 @@ Some values are better stored as constant values.
 The typical workflow consists of the following steps:
 
 \begin{enumerate}
-    \item Creation of request specific data objects and establishing database connections.
+    \item Creation of request-specific data objects and establishing database connections.
     \item Execution of actions responsible for handling the request.
     \item Actions run the business logic using database records or delegate processing to other system components.
     \item Response is aggregated and rendered in desired format to the user.
@@ -98,13 +98,13 @@ The actions may not be found for multiple reasons, for example, actions are not 
 or required properties are not present in the request.
 When multiple actions are found, they are executed in predefined order.
 Action execution describes the process of performing all found actions.
-The process may result in failure at any point of the execution, it is terminated immediately, and response
-containing failure details is sent to the user.
+The process may result in a failure at any point of the execution, if it is encountered the execution terminated immediately,
+and response containing failure details is sent to the user.
 Actions are abstraction for any arbitrary code that generates response based on the request or forwards the responsibility to another action.
 Components are concrete instances of the code.
 In this example, the component accesses environment data stored in database, which may include system settings or user privileges,
 and reads additional records tied to the requested resource.
-If no failures are encountered, successful response is generated from all the gathered inputs and sent.
+If no failures are encountered, successful response is generated from all the gathered inputs and the response is sent.
 
 
 \subsection{Summary}\label{subsec:summary}

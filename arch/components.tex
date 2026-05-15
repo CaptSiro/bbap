@@ -20,13 +20,13 @@ During implementation, several challenges arise:
         The structural problem was solved by proper implementation of general graph collection and using modified graph
         traversal algorithms.
         Implementation of proper graph collection enabled adding data to connections for reasons beyond routing.
-        Simplest example of this feature are menu routes that contain route definition, labels for each segment, and optional icon. \\
+        Simplest example of this feature are menu routes that contain route definition, labels for each segment, and optional segment icons. \\
         \hline
         Ambiguity of routes
         &
         Routes are dynamic templates for request paths including static and variable parts of a path's segment.
         Segments are marked by their type, which holds precedence rules.
-        Search results are aggregated and sorted by the precedence rules to ensuring deterministic order of search results. \\
+        Search results are aggregated and sorted by the precedence rules to ensure deterministic order of search results. \\
         \hline
         Route template evaluation
         &
@@ -52,22 +52,26 @@ Examples of routes:
         and save the remainder to the "id" variable
 \end{verbatim}
 
+
+
+The routing system supports Object-Oriented approach as well as imperative route declaration which satisfies US1 and US2 needs.
+Additionally, it supports localized route structures which satisfies US3.
 The routing system is deterministic, because it implements precedence sorting for route types, and satisfies FR1, FR2, and FR3.
 
 
 
 \subsubsection*{Database Layer}
 Tha main challenge when developing the database abstraction, was providing clear and expressive configuration.
-The implementation of the configuration had to be performant enough to be accessed multiple times for each outgoing query.
-Working with JPA~\parencite{oracle_javaee6_tutorial} inspired to annotate the code with metadata using class attributes.
+The implementation of the configuration has to be performant enough to be accessed multiple times for each outgoing query.
+Working with JPA~\parencite{oracle_javaee6_tutorial} inspired the solution to annotate the code with metadata using class attributes.
 
 The database layer implements an ORM built from ground up to fit the system needs.
 Several existing ORMs~\parencite{cycle_orm,doctrine_orm} were evaluated but their abstractions
 do not align the architectural model of the system.
 Furthermore, many of the features were deemed unnecessary and the removal of these features simplifies the programming interface.
-The trade-offs of implementing custom ORM to Cycle ORM~\parencite{cycle_orm} is described after the custom ORM is architecture is defined.
+The trade-offs of implementing custom ORM to using Cycle ORM~\parencite{cycle_orm} is described after the custom ORM architecture is defined.
 The system's ORM is built to fulfill the needs of the system while not adding extra features.
-To enable the ORM to fit into the architecture some areas had to be written in unconventional style:
+To enable the ORM to fit into the architecture some areas must be written in unconventional style:
 
 \begin{itemize}
     \item No classes similar to types of managers are present in the implementation.
@@ -79,8 +83,9 @@ To enable the ORM to fit into the architecture some areas had to be written in u
 
 The ORM abstracts tables through PHP classes.
 Each model declares its database connection, associated table, and table columns through PHP attributes.
+This decision satisfies US3 to access external databases.
 
-Example of mapping users table to the User class:
+Example of mapping users table to the User class, which satisfies UC1:
 \begin{verbatim}
     #[Database(App::DATABASE)]
     #[Table('users')]
@@ -94,8 +99,21 @@ Example of mapping users table to the User class:
         #[Column('name', Column::TYPE_STRING)]
         protected string $name;
     }
+
+    // Example of automatic form generation
+    $description = FormDescription::extract(User::class);
+    $form = new Form(HttpMethod::POST);
+
+    $description->initForm($form, model: null);
+
+    // Adding custom field
+    $form->add(new CsrfField(App::getInstance()->getRequest()));
+
+    // Adding all user controls
+    $description->addControls($form, model: null);
 \end{verbatim}
 
+The form generation from model definition partially satisfies FR6 and satisfies UC4.
 From this definition, the system is capable of:
 
 \begin{itemize}
@@ -105,7 +123,7 @@ From this definition, the system is capable of:
     \item Deleting a User record.
 \end{itemize}
 
-All Query function uses parametrized query if needed.
+All query functions use parametrized query if needed.
 For example to remove record from users table with id 4.
 
 \begin{verbatim}
@@ -121,9 +139,9 @@ For example to remove record from users table with id 4.
 When the provided Query classes are used as intended, SQL injection vulnerability is prevented.
 The Database Layer provides default fetching functions first and all which uses the same Query object.
 Default implementation of first and all functions return one or many instances of model objects.
-Fetch function uses the projection parameter to add developer defined SQL query projection optimization.
-Implementation of Database Layer does not use the \("\)SELECT *\("\) projection variant although SelectQuery objects
-uses it if projection is not set.
+Fetch functions use the projection parameter to add developer defined SQL query projection optimization.
+Implementation of Database Layer does not use the \("\)SELECT *\("\) projection variant.
+However, SelectQuery objects uses it if projection is not set.
 Not defining projection for SelectQuery is not encouraged.
 
 \begin{verbatim}
@@ -150,12 +168,12 @@ Not defining projection for SelectQuery is not encouraged.
 \end{verbatim}
 
 Defining custom ORM database interface provides control over how the features are implemented and integrated into the system.
-For example, the following statements are optimized for physical character count and expressiveness than their counterpart
+For example, the following statements are optimized for character count and expressiveness than their counterpart
 in Cycle ORM~\parencite{cycle_orm_crd}.
 
 \begin{verbatim}
     // Each case shows implementation in
-    // Custom ORM and Cycle ORM separated by new line
+    // Custom ORM and Cycle ORM respectively separated by new line
     // 1. Fetch User with given id
     $user = User::fromId(4);
 
@@ -200,7 +218,7 @@ If the user example included Address model, both models would have to be created
 but Cycle ORM handles persisting all related entities in one entity manager operation~\parencite[Persisting Related Entities]{cycle_orm_crd}.
 
 The custom ORM implementation is in prototype stage and thus some functionalities are not implemented.
-For example, transactions, relation mapping, automatic schema inference are currently not supported in the Custom ORM architecture.
+For example, transactions, relation mapping, automatic schema inference are currently not supported in the custom ORM architecture.
 
 The custom ORM implementation enables definition of attributes for automatic form generation and following conventions defined during development.
 This fulfills FR4, FR5, FR7, and partially satisfies FR6.
@@ -228,12 +246,12 @@ rendering pipeline.
         \hline
         Dependency resolution
         &
-        For the sake of simplicity, the dependencies are not resolved and all assets need to imported explicitly. \\
+        For the sake of simplicity, the dependencies are not resolved and all assets need to be imported explicitly. \\
         \hline
         Debugging
         &
-        JavaScript files requires certain order of importing the scripts.
-        Static loading for all pages of commonly used libraries solves most of the issues with incorrect import order.
+        JavaScript requires certain order of importing the files.
+        Statically loading commonly used functionalities for all pages solves most of the issues with incorrect import order.
         For the remaining cases, custom events are dispatched when code is imported. \\
         \hline
     \end{tabular}
@@ -266,13 +284,13 @@ The translation system uses static text as keys, which simplifies integration bu
 that limit the functionality of the solution:
 
 \begin{itemize}
-    \item Coupling - If default language is changed all the UI text need to be changed as well because the static text are written
+    \item Coupling - If default language is changed all the UI text need to be changed as well because the static text is written
         in default language.
         If request requires the default language the the system returns the static text to improve performance.
-    \item Refactoring - When refactoring the static texts the system creates new database records.
-        The system can not determine unused keys, and so they are left in database showing in administration dashboard.
+    \item Refactoring - When refactoring the static text, the system creates new database records.
+        The system can not determine unused keys, and so they are left in database as well as showing in administration dashboard.
     \item Ambiguity - Each key requires translation group to resolve ambiguous keys.
-        The group-key pair should always correspond to only one static text.
+        The group-key pair should correspond to one static text.
 \end{itemize}
 
 Example usage of the translation system:
@@ -291,7 +309,7 @@ Example usage of the translation system:
 
     // MyUiComponent.phtml
     <button>
-        <!-- Creates a new pairing: (exmaple.group and Submit) -->
+        <!-- Creates a new pairing: (example.group and Submit) -->
         <!-- and searches for correct translation -->
         <?= $this->tr("Submit") ?>
     <button>
@@ -313,16 +331,16 @@ While this reduces development effort, it introduces constraints:
     \item Database structure - It is limitation of the current system that it only works with built-in SQL connections.
         The problem is acknowledged but not addressed further.
     \item Grid - The current system supports custom grid rows definitions, but they have to be descendant of Model class.
-        This means, if the row is composed of multiple database tables either each rows explodes into multiple database calls
+        This means, if the row is composed of multiple database tables either each row explodes into multiple database calls
         during rendering or new abstract model needs to be implemented to wrap results of complicated select queries.
     \item Menu routes - The administration dashboard required side menu for navigation.
         Naive implementation of showing the route segment to the user would work, but it is not ideal for the user,
-        since url paths do not support spaces and other special character.
+        since url paths do not support spaces and special characters.
 \end{itemize}
 
-The menu routes constraint is solved by by implementing proper graph collection described in the Routing section.
+The menu routes constraint is solved by implementing proper graph collection described in the Routing section.
 
-Example of binding CRUD controller with autogenerated form and grid from Model annotations and with CRUD privilege
+Example of binding CRUD controller with autogenerated form and grid from model annotations and with CRUD privilege
 configuration object, that handles if logged-in user has sufficient privileges for operations.
 
 \begin{verbatim}
@@ -356,7 +374,8 @@ configuration object, that handles if logged-in user has sufficient privileges f
 
 Certain types of pages can be edited using the component-based widget editor that uses JSON structure to store the state of used widgets
 and based on the structure generates the User Interface on client's side satisfying the FR8 and FR9.
-The editor implements AI widget capable of modifying its visuals and behavior based prompt in natural language and fulfilling the AIR2.
+The editor implements AI widget capable of modifying its visuals and behavior based on prompt in natural language and fulfilling the AIR2 and UC2.
+The implementation of administration dashboard satisfies the US4.
 
 
 
@@ -397,7 +416,7 @@ Example of simple unit tests using the library:
 
 
 \subsubsection*{Communication with Generative AI}
-Communication system with APIs for LLMs follows similar paradigm to handling HTTP requests without the need for routing.
+Communication system with APIs for LLMs follows similar paradigm to handling HTTP requests without the need for routing by request path.
 Couple of challenges were encountered early on:
 
 \begin{table}[H]
@@ -408,7 +427,7 @@ Couple of challenges were encountered early on:
         \hline
         Support for multiple platforms
         &
-        For the sake of simplicity, only one solution for OpenAI API is implement. \\
+        For the sake of simplicity, only one solution for OpenAI API is implemented. \\
         \hline
         Rendering requests
         &
@@ -431,7 +450,7 @@ Couple of challenges were encountered early on:
 \end{table}
 
 Implementation of the communication system is straightforward because most of the heavy lifting is done in systems
-that is already present in the codebase.
+that are already present in the code base.
 
 Example of requesting website sources using OpenAi client fulfilling the AIR3:
 \begin{verbatim}
@@ -468,4 +487,4 @@ Example of requesting website sources using OpenAi client fulfilling the AIR3:
 
 The communication system is used to perform AI-Generation of static webpages, widgets for component-based widget editor,
 translations, source code documentation, article content generation, and website structure generation.
-The usage of the system fulfills the AIR1, AIR2, AIR3, AIR4, and AIR5.
+The usage of the system fulfills the AIR1, AIR2, AIR3, AIR4, AIR5, UC5, and UC6.

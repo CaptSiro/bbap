@@ -27,7 +27,7 @@ However, simple corporate requirements can be met with initial installment of th
 
 \subsubsection{Content-Driven}
 The goal is to implement website for the administrators to share a curated repository of recipes and cooking tips
-using the articles and role-based privilege systems.
+using article templates and role-based privilege systems.
 
 Based on the goal, the following scenario-specific requirements are identified.
 
@@ -35,7 +35,7 @@ Based on the goal, the following scenario-specific requirements are identified.
     \item Support article management functionality, including creation, editing, deletion, and listing of articles.
     \item Allow the homepage to dynamically display the most recently updated articles.
     \item Configuration of homepage content, such as setting the number of featured articles listed.
-    \item Support role-based access control for content management.
+    \item Support role-based access control for content management (this requirement satisfies UC7).
     \item Creation of user groups with defined privileges (e.g., Editor role).
     \item Support assignment of users to defined groups.
     \item Provide a system for storing configuration values editable by administrators.
@@ -115,6 +115,8 @@ The extension content page is part of the Action and View framework's systems, w
     // Bound to protocol://domain/extension
     $router->use('/extension', new Frame());
 \end{verbatim}
+
+Fulfilling the requirement satisfies the UC3.
 
 The page can be added to pages in administration as external page using fully qualified URL\@.
 
