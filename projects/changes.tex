@@ -1,7 +1,7 @@
-\subsection{Common Manual Interventions}\label{subsec:common-manual-interventions}
+\section{Common Manual Interventions}\label{sec:common-manual-interventions}
 This section is going to address several common changes, that can be applied to the framework.
 
-\subsubsection*{Adding Meta Description to Homepage}
+\subsection*{Adding Meta Description to Homepage}
 All pages created through administration dashboard include textarea to fill in meta description.
 The homepage component is defined in src/components/Home/Home.php.
 In the constructor the HtmlHead is created, and it includes function to add meta fields.
@@ -28,7 +28,7 @@ Meta description, editable through web settings, can be added this way:
     $head->addMeta('description', $description->toString());
 \end{verbatim}
 
-\subsubsection*{Editing Homepage Button Behavior}
+\subsection*{Editing Homepage Button Behavior}
 Locate the src/components/Home/Home.phtml template and edit the HTML of the page.
 To add JavaScript functionality locate home.js in the same directory.
 If the script file is created it needs to be created by hand and this line of code added to the template:
@@ -42,18 +42,18 @@ If the script file is created it needs to be created by hand and this line of co
 Edit the script to the needs and reload the page.
 The changes should take place instantaneously.
 
-\subsubsection*{Uploading Files}
+\subsection*{Uploading Files}
 Files can be uploaded via the administration dashboard.
 The files are limited to pages created in dashboard and can not be used natively in homepage template.
 Navigate to the Admin/File System/Files page and drag-and-drop your files on to the grid.
 Drag-and-dropping is currently the only way to upload files to the system.
 
-\subsubsection*{Changing Homepage Image}
+\subsection*{Changing Homepage Image}
 Add images to the public/images directory, locate the src/components/Home/Home.phtml template, and create or edit the
 desired HTML image element.
 The images are accessible on url: \(<\)project-domain\(>\)/public/images/\(<\)image-file\(>\)
 
-\subsubsection*{Creating Editor User}
+\subsection*{Creating Editor User}
 Navigate to the System/Groups and create new group called Editors and fill out the privileges mapping.
 If the checkbox is checked it means that the group has privilege to perform the action on the resource.
 

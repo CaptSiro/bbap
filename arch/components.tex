@@ -1,15 +1,15 @@
-\subsection{Component-Level Architecture}\label{subsec:component-architecture}
+\section{Component-Level Architecture}\label{sec:component-architecture}
 This section addresses challenges faced during implementation of each component.
 
 
 
-\subsubsection{Routing}
+\subsection{Routing}\label{subsec:routing}
 The routing mechanism is responsible for mapping request paths to actions.
 During implementation, several challenges arise:
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|p{0.5\linewidth}|p{0.5\linewidth}|}
+    \begin{tabular}{|p{0.28\linewidth}|p{0.62\linewidth}|}
         \hline
         \textbf{Challenge} & \textbf{Solution} \\
         \hline
@@ -35,14 +35,15 @@ During implementation, several challenges arise:
         \hline
     \end{tabular}
     \caption{Challenges and Solutions of Routing Implementation}
-    \label{tab:cs-routing}
+    \label{tab:csRouting}
 \end{table}
 
 Examples of routes:
+
 \begin{verbatim}
     / - Get current node.
     /** - Match all segments after **. This definition is
-        least descriptive thus it has the lowest prescedence.
+        least descriptive thus it has the lowest precedence.
     /foo - Match static "foo"
     /[foo] - Save first segment as "foo" variable
     /foo/[bar] - Match first segment as static "foo"
@@ -52,15 +53,13 @@ Examples of routes:
         and save the remainder to the "id" variable
 \end{verbatim}
 
-
-
 The routing system supports Object-Oriented approach as well as imperative route declaration which satisfies US1 and US2 needs.
 Additionally, it supports localized route structures which satisfies US3.
 The routing system is deterministic, because it implements precedence sorting for route types, and satisfies FR1, FR2, and FR3.
 
 
 
-\subsubsection{Database Layer}
+\subsection{Database Layer}\label{subsec:databaseLayer}
 Tha main challenge when developing the database abstraction, was providing clear and expressive configuration.
 The implementation of the configuration has to be performant enough to be accessed multiple times for each outgoing query.
 Working with JPA~\parencite{oracle_javaee6_tutorial} inspired the solution to annotate the code with metadata using class attributes.
@@ -225,13 +224,13 @@ This fulfills FR4, FR5, FR7, and partially satisfies FR6.
 
 
 
-\subsubsection{Asset Loading (SideLoader)}
-The SideLoader component introduces asynchronous asset handling, which complicates an otherwise synchronous server-side
+\subsection{Asset Loading}\label{subsec:asset-loading}
+The Asset Loading system (SideLoader) component introduces asynchronous asset handling, which complicates an otherwise synchronous server-side
 rendering pipeline.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|p{0.5\linewidth}|p{0.5\linewidth}|}
+    \begin{tabular}{|p{0.28\linewidth}|p{0.62\linewidth}|}
         \hline
         \textbf{Challenge} & \textbf{Solution} \\
         \hline
@@ -256,7 +255,7 @@ rendering pipeline.
         \hline
     \end{tabular}
     \caption{Challenges and Solutions of Asset Loading}
-    \label{tab:cs-sideloader}
+    \label{tab:csSideloader}
 \end{table}
 
 Example of importing CSS and JavaScript files from view template:
@@ -279,7 +278,7 @@ Example of importing CSS and JavaScript files from view template:
 
 
 
-\subsubsection{Translation System}
+\subsection{Translation System}\label{subsec:translation-system}
 The translation system uses static text as keys, which simplifies integration but introduces constraints,
 that limit the functionality of the solution:
 
@@ -319,7 +318,7 @@ The translation system includes generating translations using AI and thus satisf
 
 
 
-\subsubsection{Administration Interface}
+\subsection{Administration Interface}\label{subsec:administration-interface}
 The administration system automates CRUD operations based on database models satisfying the FR4.
 While this reduces development effort, it introduces constraints:
 
@@ -379,7 +378,7 @@ The implementation of administration dashboard satisfies the US4.
 
 
 
-\subsubsection{Testing}
+\subsection{Testing}\label{subsec:testing}
 The testing component is designed for simplicity, but this simplicity leads to:
 
 \begin{itemize}
@@ -415,13 +414,13 @@ Example of simple unit tests using the library:
 
 
 
-\subsubsection{Communication with Generative AI}
+\subsection{Communication with Generative AI}\label{subsec:communication-with-generative-ai}
 Communication system with APIs for LLMs follows similar paradigm to handling HTTP requests without the need for routing by request path.
 Couple of challenges were encountered early on:
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|p{0.5\linewidth}|p{0.5\linewidth}|}
+    \begin{tabular}{|p{0.28\linewidth}|p{0.62\linewidth}|}
         \hline
         \textbf{Challenge} & \textbf{Solution} \\
         \hline
@@ -446,7 +445,7 @@ Couple of challenges were encountered early on:
         \hline
     \end{tabular}
     \caption{Challenges and Solutions of Communication with Generative AI}
-    \label{tab:cs-generative-ai}
+    \label{tab:csGenerativeAi}
 \end{table}
 
 Implementation of the communication system is straightforward because most of the heavy lifting is done in systems

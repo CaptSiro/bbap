@@ -1,4 +1,4 @@
-\section{System Architecture}\label{sec:system-architecture}
+\chapter{System Architecture}\label{ch:system-architecture}
 This section describes the challenges encountered during implementation of proposed design and techniques used to solve them.
 The design expects full independence between system's components, in practice, some coupling emerges due to accessing shared
 resources, execution order, communication, and reuse of code sections.
@@ -16,7 +16,7 @@ This approach provides easily accessible datasets, that are needed in all parts 
 
 \input{arch/components}
 
-\subsection{Data Flow}\label{subsec:architecture-data-flow}
+\section{Data Flow}\label{sec:architecture-data-flow}
 The design suggests a clean pipeline, but the actual execution model includes additional complexity:
 
 \begin{itemize}
@@ -28,7 +28,7 @@ The design suggests a clean pipeline, but the actual execution model includes ad
 
 These factors make the system execution convoluted compared to the idealized pipeline model.
 
-\subsection{Architectural Trade-offs}\label{subsec:architectural-tradeoffs}
+\section{Architectural Trade-offs}\label{sec:architectural-tradeoffs}
 Multiple trade-offs were encountered while implementing components:
 
 \begin{itemize}
@@ -44,7 +44,7 @@ Similarly, it uses a custom HTTP route compiler to provide higher abstraction.
 Finally, the database schema is initialized through SQL scripts rather than initializing it from model descriptions
 for finer-grained control.
 
-\subsection{Summary}\label{subsec:architecture-summary}
+\section{Summary}\label{sec:architecture-summary}
 The system architecture exposes the complexity hidden behind the high-level design.
 While the design goals emphasize simplicity, modularity, and extensibility, the implementation reveals constraints
 imposed by abstractions, dependencies, complex configuration, and numerous edge cases.

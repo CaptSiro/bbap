@@ -1,8 +1,8 @@
-\section{System Design}\label{sec:system-design}
+\chapter{System Design}\label{ch:system-design}
 This section describes how the system works without going into the implementation details.
 Painting the whole system as a black-box implementation, the interface is known, but the underlying implementation is not.
 
-\subsection{Design Goals}\label{subsec:design-goals}
+\section{Design Goals}\label{sec:design-goals}
 The primary objective of the system is to provide a flexible environment for full-stack development.
 The design emphasizes simplicity and ease of integration, allowing the components to be extended easily.
 
@@ -19,7 +19,7 @@ These goals reflect the prototype nature of the system, which aims to explore au
 
 \input{design/components}
 
-\subsection{System Data Flow}\label{subsec:data-flow-and-integration}
+\section{System Data Flow}\label{subsec:data-flow-and-integration}
 All components have access to the databases that act as a shared representation of project data.
 Environment settings are not limited to using database as persistent data storage.
 Some values are better stored as constant values.
@@ -45,42 +45,42 @@ The typical workflow consists of the following steps:
     \begin{tikzpicture}
         [
         node distance=2.5cm,
-        lane/.style={draw, minimum width=16cm, minimum height=1.5cm, anchor=west},
-        activity/.style={draw, rectangle, minimum width=2.8cm, minimum height=0.8cm},
-        arrow/.style={->, thick}
+        rclane/.style={draw, minimum width=15cm, minimum height=1.5cm, anchor=west},
+        rcactivity/.style={draw, rectangle, minimum width=2.8cm, minimum height=0.8cm},
+        rcarrow/.style={->, thick}
         ]
 
-        \node[lane, label={[anchor=west]west:\textbf{Client}}] (client) at (0,4) {};
-        \node[lane, label={[anchor=west]west:\textbf{Routing}}] (routing) at (0,2.5) {};
-        \node[lane, label={[anchor=west]west:\textbf{Actions}}] (actions) at (0,1) {};
-        \node[lane, label={[anchor=west]west:\textbf{Components}}] (components) at (0,-0.5) {};
-        \node[lane, label={[anchor=west]west:\textbf{Database}}] (db) at (0,-2) {};
+        \node[rclane, label={[anchor=west]west:\textbf{Client}}] (client) at (0,4) {};
+        \node[rclane, label={[anchor=west]west:\textbf{Routing}}] (routing) at (0,2.5) {};
+        \node[rclane, label={[anchor=west]west:\textbf{Actions}}] (actions) at (0,1) {};
+        \node[rclane, label={[anchor=west]west:\textbf{Components}}] (components) at (0,-0.5) {};
+        \node[rclane, label={[anchor=west]west:\textbf{Database}}] (db) at (0,-2) {};
 
-        \node[activity] (req) at (3,4) {Request};
-        \node[activity] (response) at (13,4) {Response};
+        \node[rcactivity] (req) at (3,4) {Request};
+        \node[rcactivity] (response) at (13,4) {Response};
 
-        \node[activity] (route) at (5,2.5) {Action Selection};
+        \node[rcactivity] (route) at (5,2.5) {Action Selection};
 
-        \node[activity] (action) at (7,1) {Execute Action};
+        \node[rcactivity] (action) at (7,1) {Execute Action};
 
-        \node[activity] (logic) at (11,-0.5) {Business Logic};
+        \node[rcactivity] (logic) at (11,-0.5) {Business Logic};
 
-        \node[activity] (env) at (9,-2) {Environment};
-        \node[activity] (query) at (13,-2) {Records};
+        \node[rcactivity] (env) at (9,-2) {Environment};
+        \node[rcactivity] (query) at (13,-2) {Records};
 
-        \draw[arrow, blue] (req) |- (route);
-        \draw[arrow, blue] (route) |- (action);
-        \draw[arrow, blue] (action) |- (logic);
-        \draw[arrow, blue] (action) |- (env);
-        \draw[arrow, blue] (logic) |- (query);
+        \draw[rcarrow, blue] (req) -- (3,2.5) -- (route);
+        \draw[rcarrow, blue] (route) -- (5,1) -- (action);
+        \draw[rcarrow, blue] (action) -- (7,-0.5) -- (logic);
+        \draw[rcarrow, blue] (action) -- (7,-2) -- (env);
+        \draw[rcarrow, blue] (logic) -- (11,-2) -- (query);
 
-        \draw[arrow, red] (route) -| node[pos=0.25, above] {Action not found} (response);
-        \draw[arrow, red] (action) -| node[pos=0.25, above] {Bad request} (response);
+        \draw[rcarrow, red] (route) -| node[pos=0.25, above] {Action not found} (response);
+        \draw[rcarrow, red] (action) -| node[pos=0.25, above] {Bad request} (response);
 
-        \draw[arrow, green] (logic) -| (response);
+        \draw[rcarrow, green] (logic) -| (response);
 
         % Legend
-        \node[draw, align=left, anchor=north east] at (16,-3) {
+        \node[draw, align=left, anchor=north west] at (0,-3) {
             \begin{tikzpicture}[arrow/.style={->, thick}]
                 \draw[arrow, blue] (0,0) -- (1,0) node[right, black] {Normal flow};
                 \draw[arrow, red] (0,-0.5) -- (1,-0.5) node[right, black] {Error flow};
@@ -89,7 +89,7 @@ The typical workflow consists of the following steps:
         };
     \end{tikzpicture}
     \caption{System Request Processing}
-    \label{fig:system-request-processing}
+    \label{fig:systemRequestProcessing}
 \end{figure}
 
 This swimming lanes diagram shows lifetime of request with database access.
@@ -107,7 +107,7 @@ and reads additional records tied to the requested resource.
 If no failures are encountered, successful response is generated from all the gathered inputs and the response is sent.
 
 
-\subsection{Summary}\label{subsec:summary}
+\section{Summary}\label{sec:summary}
 The proposed design emphasizes simplicity, abstraction, and extensibility.
 Designing modern systems requires solving domain-specific problems while satisfying system constraints.
 Simplicity and extensibility are two constraints that work against each other.

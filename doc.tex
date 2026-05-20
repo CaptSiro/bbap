@@ -2,34 +2,114 @@
 %! Date = 11/26/2025
 
 % Preamble
-\documentclass[11pt]{article}
+\documentclass{ctu/class/ctuthesis}
 
 % Packages
 \usepackage{amsmath}
-\usepackage[english]{babel}
-\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
-\usepackage{graphicx}
-\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+%\usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{float}
 \usepackage[backend=biber,style=numeric]{biblatex}
 \usepackage{pgf}
 \usepackage{url}
 \usepackage{tikz}
 \usepackage{csquotes}
+\usepackage{listings}
 \usetikzlibrary{arrows.meta, positioning}
 \addbibresource{references.bib}
 
-\title{RouteChasm}
+\ctusetup{
+    xdoctype = B,
+    xfaculty = F4,
+    mainlanguage = english,
+    titlelanguage = english,
+    title-english = {Design and Implementation of a PHP Web Application Framework with AI Support for Website Generation and Management},
+    title-czech = {Návrh a implementace webového aplikačního frameworku v PHP s podporou umělé inteligence pro generování a správu webových stránek},
+    keywords-english = {content management system, PHP web framework, generative artificial intelligence, natural language processing},
+    keywords-czech = {systém pro správu obsahu, webový PHP framework, generativní umělá inteligence, zpracování přirozeného jazyka},
+    department-english = {Department of Computer Graphics and Interaction},
+    author = {Jan Horák},
+    supervisor = {Bc. Egor Ulianov},
+    supervisor-address = {Department of Computer Graphics and Interaction FEE},
+    month = 5,
+    year = 2026,
+}
+
+\ctuprocess
+
+\begin{abstract-english}
+    This thesis presents the design and implementation of a prototype full-stack framework written using PHP\@.
+    The framework enables transforming requests in natural language into deployable website.
+    The Generative AI acts as assistive layer that supports website structure creation from suggestion,
+    generating content, composing UI blocks, and preparing templates or configuration.
+    The AI layer allows human control over all generated outputs.
+
+    The framework provides core full-stack web application functionality, including routing, controllers, middleware,
+    templating, validation, persistence, authentication.
+    Using the core functionalities, CMS features are implemented, which include website management, content,
+    media, and publishing management with draft and published states.
+    Role-based access control model is present in the framework and supports anonymous users, editors, and administrators.
+    The frameworks supports multi-page applications using predefined page templates, including home page,
+    a generic content page, an article list, an article detail, and a contact page.
+
+    The AI-Generation implemented in the prototype must cover website structure generation, UI blocks generation,
+    and proposing modifications of an existing page based on a natural-language request.
+    The framework is validated through the creation of three websites, for which the full workflow from initial request
+    to publication is documented.
+    The evaluation includes CMS functionality of the system, AI-Generation, and basic metrics such as requirement coverage,
+    number of manual interventions, and time to publishable state.
+    This thesis concludes with an overview of results and identified limitations.
+\end{abstract-english}
+\begin{abstract-czech}
+    Tato bakalářská práce představuje návrh a implementaci prototypu full-stack frameworku napsaného v jazyce PHP\@.
+    Tento framework umožňuje převádět požadavky v přirozeném jazyce na funkční webové stránky.
+    Generativní AI funguje jako pomocná vrstva, která podporuje návrh struktury webových stránek,
+    generování obsahu, sestavování bloků uživatelského rozhraní a přípravu šablon či konfigurace.
+    AI vrstva umožňuje uživateli kontrolovat všechny generované výstupy.
+
+    Tento framework poskytuje základní funkce pro full-stack webové aplikace, včetně směrování, controllerů, middlewaru,
+    vykreslování šablon, validace, ukládání dat a autentizace.
+    Pomocí těchto základních funkcí jsou implementovány CMS funkce, které zahrnují správu webových stránek, obsahu,
+    médií a publikování se stavy konceptu a publikovaného obsahu.
+    Framework obsahuje model pro řízení přístupu založený na rolích a podporuje anonymní uživatele, editory a administrátory.
+    Framework podporuje vícestránkové aplikace využívající předdefinované šablony stránek, včetně domovské stránky,
+    obecné stránky s obsahem, seznamu článků, detailu článku a kontaktní stránky.
+
+    Funkce generování pomocí AI implementovaná v prototypu musí zahrnovat generování struktury webových stránek, generování bloků uživatelského rozhraní
+    a navrhování úprav stávající stránky na základě požadavku v přirozeném jazyce.
+    Framework je ověřen vytvořením tří webových stránek, u nichž je zdokumentován celý pracovní postup od počátečního požadavku
+    až po zveřejnění.
+    Hodnocení zahrnuje funkčnost systému CMS, generování pomocí AI a základní metriky, jako je pokrytí požadavků,
+    počet ručních úprav a doba do dosažení stavu vhodného ke zveřejnění.
+    Tato práce končí přehledem výsledků a identifikovaných omezení.
+\end{abstract-czech}
+
+\begin{thanks}
+    I would like to express my gratitude to my mother for her continuous support, patience,
+    and encouragement throughout my studies and during the preparation of this thesis.
+
+    I also thank my family for their support and understanding, which helped me stay motivated during my studies.
+
+    Finally, I would like to thank my friends for their encouragement, helpful discussions,
+    and for making my studies more enjoyable.
+\end{thanks}
+
+\begin{declaration}
+    I hereby declare that the Bachelor’s Thesis titled Design and Implementation of a PHP Web Application Framework with AI Support for Website Generation and Management
+    is my own independent work and that I have declared all sources of information used.
+    I declare that I have used artificial intelligence tools during the preparation and writing of the final thesis.
+
+    In Prague, ~\monthinlanguage{title}~\ctufield{year}
+\end{declaration}
+
+\title{Design and Implementation of a PHP Web Application Framework with AI Support for Website Generation and Management}
 \author{Jan Horák}
 
 % Document
 \begin{document}
-
     \maketitle
 
-    \clearpage
-
-    \tableofcontents
+    \includepdf[pages=-,pagecommand={},width=\paperwidth]{zadani.pdf}
+    \includepdf{prohlaseni}
 
     \clearpage
 
