@@ -438,7 +438,7 @@ Couple of challenges were encountered early on:
         Large Language Models do not generate deterministic outputs, and relying
         on prompt instructions to enforce a format is unreliable.
         To combat this issue, the OpenAI API provides schema-based JSON response enforcement.
-        All the schema definitions were implemented into custom ORM solution that generates valid schema.
+        All the schema definitions were implemented into custom ORM (different from database ORM) solution that generates valid schema.
         Same schemas cannot be defined, for instance recursive structures.
         In those cases generic JSON response is enforced and the expected structure is defined in the prompt messages.
         \\

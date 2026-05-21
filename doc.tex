@@ -19,17 +19,23 @@
 
 \ctusetup{
     xdoctype = B,
-    xfaculty = F4,
+    xfaculty = F3,
     mainlanguage = english,
     titlelanguage = english,
+    doctype-english = {Bachelor Thesis},
+    doctype-czech = {Bakalářská práce},
     title-english = {Design and Implementation of a PHP Web Application Framework with AI Support for Website Generation and Management},
     title-czech = {Návrh a implementace webového aplikačního frameworku v PHP s podporou umělé inteligence pro generování a správu webových stránek},
     keywords-english = {content management system, PHP web framework, generative artificial intelligence, natural language processing},
     keywords-czech = {systém pro správu obsahu, webový PHP framework, generativní umělá inteligence, zpracování přirozeného jazyka},
     department-english = {Department of Computer Graphics and Interaction},
     author = {Jan Horák},
-    supervisor = {Bc. Egor Ulianov},
+    supervisor = {Mgr. Egor Ulianov},
     supervisor-address = {Department of Computer Graphics and Interaction FEE},
+    fieldofstudy-english = {Open Informatics},
+    subfieldofstudy-english = {Computer Games and Graphics},
+    fieldofstudy-czech = {Otevřená informatika},
+    subfieldofstudy-czech = {Počítačové hry a grafika},
     month = 5,
     year = 2026,
 }
@@ -37,7 +43,7 @@
 \ctuprocess
 
 \begin{abstract-english}
-    This thesis presents the design and implementation of a prototype full-stack framework written using PHP\@.
+    This thesis presents the design and implementation of a prototype full-stack framework written in PHP\@.
     The framework enables transforming requests in natural language into deployable website.
     The Generative AI acts as assistive layer that supports website structure creation from suggestion,
     generating content, composing UI blocks, and preparing templates or configuration.
@@ -145,12 +151,12 @@
 
     \clearpage
 
-    \printbibliography[title={References}, heading=bibintoc]
+    \printbibliography[title={References}]
 
     \clearpage
     \appendix
 
-    \section{Project Repositories}\label{sec:project-repositories}
+    \chapter{Project Repositories}\label{ch:project-repositories}
 
     \begin{itemize}
         \item RouteChasm (Prototype/Framework): \url{https://github.com/CaptSiro/route-chasm}
